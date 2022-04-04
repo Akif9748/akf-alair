@@ -50,19 +50,7 @@ module.exports = async message => {
     if (message.channel.id === duyuru) message.react("✅").catch(console.error);
     if (message.content.length > 3) client.emit("rank", message)//RANK
 
-    /**
-     * KELİME OYUNU SYSTEMS:
-     */
-    if (message.content === `${prefix}kelime`) return kelimeoyunu.basla(message)
-    const guildid = message.guild.id, channelid = message.channel.id;
 
-    if (await KelimeModel.findOne({ guildid, channelid }))
-
-        if (message.content.startsWith(prefix + "kelimedur"))
-            kelimeoyunu.dur(message)
-
-        else if (!message.content.startsWith(prefix))
-            kelimeoyunu.devamke(message)
 
 
 }
