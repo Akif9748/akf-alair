@@ -8,7 +8,7 @@ const kufur = require("../util/kufur.json");
 const selamlama = ["sa", "selam", "selamun aleyküm", "selamunaleykum", "selamunaleyküm", "selamün aleyküm"]
 
 //SÖVMEYE KARŞI YANIT
-const sovgu = ["Sövmek sana yakışmıyor", "Niye ?", "Neden sövdün ki şimdi? Kötü bir şey mi yaptım :(", "Hop hop, yavaaş!", "Ama, niye ya?", "Ne suçum vardı?", "Biraz anlama sorunumuz olabilir ama sövmeye hiç gerek yoktu :/"]
+const sovgu = ["niye sövdün ki aq", "Niye ?", "Neden sövdün ki şimdi? Kötü bir şey mi yaptım :(", "Hop hop, yavaaş!", "Ama, niye ya?", "Ne suçum vardı?", "Biraz anlama sorunumuz olabilir ama sövmeye hiç gerek yoktu :/"]
 
 /**
  * GENEL SUNUCU YANITLARI:
