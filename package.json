@@ -1,0 +1,32 @@
+{
+  "name": "alair",
+  "version": "4.14.0",
+  "description": "Alair Bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "author": "Akif9748",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Akif9748/Alair.git"
+  },
+  "engines": {
+    "node": ">=16.X"
+  },
+  "dependencies": {
+    "@discordjs/builders": "^0.8.2",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "async-g-i-s":"^1.0.1",
+    "canvacord": "^5.2.3",
+    "canvas": "^2.8.0",
+    "discord.js": "^13.6.0",
+    "mongoose": "^6.2.7",
+    "node-fetch": "^2.6.7",
+    "parse-ms": "^2.1.0",
+    "turkce": "^1.0.3",
+    "yt-search": "^2.10.3"
+  }
+}
