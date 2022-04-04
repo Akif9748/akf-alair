@@ -17,11 +17,11 @@ module.exports = (msg, msj) => {
 
     //MESAJ tek haneyse:
     if (msj.length === 1)
-        return rareply([msj, "Sadece **" + msj + "** yani"]);
+        return msg.reply("Sadece **" + msj + "** yani");
 
 
     //💘💛  
-    if (has("gs", "galata")) return reply(":heart: :yellow_heart:");
+    if (msg.includes("gs") || msg.includes("galata")) return msg.reply(":heart: :yellow_heart:");
 
     //EMOJIYSE:
     if (msj.length === 2)
