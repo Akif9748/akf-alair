@@ -1,5 +1,6 @@
 const { MessageEmbed, Message } = require('discord.js');
 const mainReply = require("./util/mainReply");
+const { Custom } = require("../util/models");
 
 //KÜFÜRLER
 const kufur = require("../util/kufur.json");
@@ -30,10 +31,13 @@ module.exports = (prefix, msg, komut) => {
 
   const dmkosul = channel.type === "DM";
 
-  if (!dmkosul)
+  if (!dmkosul){
     if (!guild.me.permissions.has("EMBED_LINKS") || !guild.me.permissionsIn(channel).has("EMBED_LINKS"))
       return msg.reply("Embed mesaj gönderme yetkim kapalı.").catch(console.error);
-
+    
+    const sonuc = await Custom.findOne({ guildid: guild.id, key: content });
+    if (sonuc) return msg.reply(sonuc.value);
+  }
   //MESAJ İÇERİĞİ:
   const msj = content.replace(prefix + "sor ", "").toLocaleLowerCase("tr").trim();
 
