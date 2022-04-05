@@ -26,7 +26,7 @@ const herTurlu = {
  * @param {Boolean} komut Veri komuttan mı geldi?
  * @returns {Message} Mesaj olarak döner
  */
-module.exports = (prefix, msg, komut) => {
+module.exports = async (prefix, msg, komut) => {
   const { channel, client, guild, content, mentions } = msg;
 
   const dmkosul = channel.type === "DM";
