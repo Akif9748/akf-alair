@@ -1,6 +1,7 @@
 const { Message } = require('discord.js');
 
 /**
+ * [ MİNÖR ]
  * Alair otoCevap zekası:
  * @param {Message} msg 
  * @param {String} msj 

@@ -8,10 +8,7 @@ const ms = require("parse-ms");
 const türler = {
     other: { ad: "Genel", emoji: '🏳', aciklama: 'Genel Kategorisi' },
     bot: { ad: "Bot", emoji: '🤖', aciklama: 'Bot ile ilgili komutlar' },
-    muzik: { ad: "Müzik", emoji: '🎵', aciklama: 'Müzik komutları' },
     eglence: { ad: "Eğlence", emoji: '🕹', aciklama: 'Eğlence komutları' },
-    oyun: { ad: "Oyun", emoji: '🎮', aciklama: 'Oyun komutları' },
-    resim: { ad: "Resim", emoji: '🖼', aciklama: 'Resim düzenlemeli komutlar' },
     ekonomi: { ad: "Ekonomi", emoji: '💵', aciklama: 'Ekonomi komutları' },
     yetkili: { ad: "Yetkili", emoji: '🏅', aciklama: 'Yetkili komutları' },
     interaction: { ad: "Interaction", emoji: '🆕', aciklama: 'Interaction komutları' },

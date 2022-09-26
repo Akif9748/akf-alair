@@ -4,7 +4,6 @@
  * prototype handler 
  */
 const Discord = require("discord.js");
-const { Player } = require("discord-music-player");
 const { UserModel } = require("./models");
 const { emoji, token, renk, sahip, tokenBeta, sunucu } = require("./config.json");
 const ayarlar = { renk, sahip, start: Date.now(), emoji, kullanim: { komut: 0, interaction: 0 } };
@@ -53,23 +52,6 @@ module.exports = class Alair extends Discord.Client {
         this.sunucu = sunucu;
         this.commands = new Discord.Collection();
         this.interactions = new Discord.Collection();
-        this.player = new Player(this, { timeout: 10 }).on('songChanged', (queue, song) => {
-
-            const embed = new MessageEmbed()
-                .setDescription(`[${song.name}](${song.url}), ${song.requestedBy} tarafından çalınmaya başlandı!`)
-                .setThumbnail(song.thumbnail).setName("Müzik sistemi")
-
-            queue.data.channel.send({ embeds: [embed] }).catch(_ => _);
-
-        }).on('queueDestroyed', queue => {
-            const embed = new MessageEmbed().setTitle("Müzik durduruldu!").setName("Müzik sistemi")
-            return queue.data.channel.send({ embeds: [embed] }).catch(_ => _);
-
-        }).on('queueEnd', queue => this.player.emit('queueDestroyed', queue)).on('error', (error, queue) => {
-            console.log("Bot error in", queue.guild.name, error);
-            return queue.data.channel.send("**HATA!**" + "```\n" + error + "\n```").catch(_ => _);
-
-        });
 
         this.login().then(_ => {
             this.davet = `https://discord.com/api/oauth2/authorize?client_id=${this.user.id}&permissions=8&scope=bot%20applications.commands`
