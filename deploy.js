@@ -1,13 +1,11 @@
-const token = "",
+const { token } = require("./util/config.json"),
 	clientId = "";
 const { REST } = require('@discordjs/rest');
 const fs = require("fs")
-const commands = [];
-for (const command of fs.readdirSync("./interactions"))
-	commands.push(require("./interactions/" + command).data)
+const body = fs.readdirSync("./interactions").map(command => require("./interactions/" + command).data);
 
 
-//REST APİYE 9. versiyon üzerinden token veriliyor
+//REST APIYE 9. versiyon üzerinden token veriliyor
 const rest = new REST({ version: '9' }).setToken(token);
 
 
@@ -17,13 +15,13 @@ const rest = new REST({ version: '9' }).setToken(token);
 		console.log('Yükleme işlemi başladı!');
 		const data = await rest.get(`/applications/${clientId}/commands`)
 		console.log(data)
-		//REST APİ'ye komut aktarımı:
+		//REST API'ye komut aktarımı:
 		await rest.put(
 			`/applications/${clientId}/commands`,
-			{ body: commands }
+			{ body }
 		);
 
-		console.log('REST APİYE başarıyla yüklendi!');
+		console.log('REST APIYE başarıyla yüklendi!');
 	} catch (error) {
 		console.error(error);
 	}

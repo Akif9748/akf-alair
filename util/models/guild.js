@@ -1,24 +1,47 @@
-const { Schema, model } = require('mongoose');
-
-const guildSema = new Schema({
+const mongoose = require('mongoose');
+const { defaultPrefix } = require("../config.json")
+const guildSema = new mongoose.Schema({
 
     //MAIN: 
-    guildid: String,
+    guildId: { type: String, unique: true },
 
     //IDLER
-    hgrol: String, //'891243339234566154',
-    hgkanal: String,// '841645565925130240',
-    log: String, //'941840958096568400',
-
-    //Stringler
-    prefix: { type: String, default: "!" },
-
-       //BOOLLAR
-    hgkapa: Boolean,//false,
-    otokapa: Boolean,// false,
-    kufur: Boolean//false,
+    hgrol: String,
+    hgkanal: String,
+    log: String,
+    sayac: String,
 
 
-});
+    //ARRAYLAR
+    blacklist: { type: [String], default: [] },
 
-module.exports = model('guild', guildSema);
+    //NESTED / OBJELER \ OYUNLAR
+    sayi: {
+        channelId: String,
+        sayi: { type: Number, default: 0 }
+    },
+    kelime: {
+        channelId: String,
+        topkelime: { type: Number, default: 0 },
+        sonharf: String,
+        kelimeler: [String],
+    },
+
+    //STRINGLER
+    prefix: { type: String, default: defaultPrefix },
+    hgmesaj: String,
+
+    //BOOLLAR
+    sunucukur: Boolean,
+
+    hgkapa: Boolean,
+    otokapa: { type: Boolean, default: true },
+    kufur: Boolean,
+    caps: Boolean,
+    reklam: Boolean,
+    etiket: Boolean
+
+
+}, { versionKey: false, });
+
+module.exports = mongoose.model('guild', guildSema);

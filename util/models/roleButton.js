@@ -1,3 +1,8 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-module.exports = model('roleButton', new Schema({ rolid: String, messageid: String }));
+module.exports = mongoose.model('roleButton',
+    new mongoose.Schema({
+        authorid: String,
+        rolid: String,
+        messageid: String
+    }, { versionKey: false }));

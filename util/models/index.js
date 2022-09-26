@@ -1,14 +1,13 @@
-const GuildModel = require("./guild"),
-    KelimeModel = require("./kelime"),
-    MemberModel = require("./member"),
-    TimeoutModel = require("./timeout"),
+const ButtonRolModel = require("./roleButton"),
+    GuildModel = require("./guild"),
     UserModel = require("./user"),
-    ButtonRolModel = require("./roleButton"),
     Ceylin = require("./ceylin"),
-    Custom = require("./custom"),
-    BlackListModel = require("./blacklist");
+    Custom = require("./custom");
 
+/**
+ * Alair ana model dosyası / Ara katman
+ */
 module.exports = {
-    GuildModel, KelimeModel, MemberModel, TimeoutModel,
-    UserModel, ButtonRolModel, Ceylin, BlackListModel, Custom
+    GuildModel, ButtonRolModel,
+    UserModel, Custom, Ceylin
 };

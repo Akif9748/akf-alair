@@ -1,8 +1,8 @@
-const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
-module.exports = model('custom', new Schema({
-    guildid: String,
+module.exports = mongoose.model('custom', new mongoose.Schema({
+    guildId: String,
     authorid: String,
     key: String,
     value: String
-}));
+}, { versionKey: false, }));
