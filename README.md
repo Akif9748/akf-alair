@@ -65,16 +65,17 @@ ayrıca util/ altındaki bazı dosyalar da bu katmana dahil, mesela kullanıcıy
 - Sonuna kadar hız için ayarlı.
 - `index.js` kontrolcüsü var, bot çökerse hızlı yeniden başlatan bir yönetici. Webhookla bilgi veriyor kendi çökerse.
 - `app.js` asıl ana dosya. Veritabanına bağlantı, Client kurulumu, komutlar, eventler başlatımı burada olur.
-- **Daha fazla açıklama:**
+### **Daha fazla açıklama:**
 - Cliente komutlar, ve interactionları koyar. 
 
-**Handlerler:**
+#### **Handlerler:**
 - Event handler doğrudan orada dosya adlarıyla bağlanır.
 - interaction handler dosyadaki SlashCommandBuilder verisinden alınan bilgilerle anahtarlanıp, run ile de keylenir.
 - command handler bir dosyayı nasıl kaydeder?
-### KEY:
-komutadı (tüm alliaslar için)
-### VALUE:
+#### KEY:
+komutadı
+#### VALUE:
+Eğer 1. allias ise komutun kendisi, eğer diğer allias ise 1. allias'ın keyi.
 ```js
 const dosya = { 
     help: { 
