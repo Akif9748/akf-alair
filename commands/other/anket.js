@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const emojiler = ["0️⃣", '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
+const { delay } = require("../../util")
 
 exports.run = async (client, message, args) => {
 
@@ -9,31 +10,31 @@ exports.run = async (client, message, args) => {
 
   const embed = new Discord.MessageEmbed()
     .setTitle(message.author.tag + ' başlattığı oylama:')
-    .setColor(client.renk)
-    .setDescription(anket)
-    .setAuthor({ name: `${client.user.username} • Anket sistemi`, iconURL: client.user.avatarURL() })
-
+    .setDescription("```"+anket+"```")
+    .setName("Anket sistemi");
+    
   if (sayı == 1) {
     const msg = await message.channel.send({ embeds: [embed.setFooter({ text: ' ✅ Haydi oyla! ⛔ ' })] })
-    msg.react('✅').catch(() => { return });
-    msg.react('⛔').catch(() => { return });
-
-    return setTimeout(() => message.delete().catch(console.error), 1000);
+    await msg.react('✅')
+    await msg.react('⛔')
+    await delay(1000)
+    return await message.delete();
 
   } else if (9 >= sayı && sayı >= 1) {
 
     const msg = await message.channel.send({ embeds: [embed.setFooter({ text: '🔢Haydi oyla!🔢' })] })
-    for (var i = 1; i <= sayı; i++)
-      msg.react(emojiler[i]).catch(console.error);
+    for (let i = 1; i <= sayı; i++)
+      await msg.react(emojiler[i])
 
-    return setTimeout(() => message.delete().catch(console.error), 1000);
+    await delay(1000)
+    return await message.delete();
 
   } else return message.reply('Şık sayısı sadece 1 ve 9 arasındaki rakamlar olabilir.');
 
 
 };
 exports.help = {
-  name: 'anket',
+  name: ['anket',"oyla"],
   description: 'Anket oluşturur!',
   usage: 'anket (Şık sayısı) Deneme'
 };

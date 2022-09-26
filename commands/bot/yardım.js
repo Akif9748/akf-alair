@@ -1,11 +1,22 @@
 const Discord = require('discord.js')
 const { MessageActionRow, MessageEmbed, MessageSelectMenu } = Discord;
-const { türler } = require("../../util/classes");
+const { türler } = require("../../util");
 
-exports.run = (client, message, args, prefix) => {
-    const bag = '» Bağlantılar:', davet = `[Davet Linki](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands) & [Destek Sunucusu](https://discord.gg/9cBnKmjzvH)`,
-        bilgi = `Bir komut hakkında daha fazla almak için \`${prefix}yardım komutadı\` yazın.`, ornek = `Örneğin \`${prefix}yardım çeviri\` gibi.`,
-        av = client.user.displayAvatarURL(), baslık = `${client.user.username} • Yardım menüsü`, resim = message.member.displayAvatarURL(), isim = message.author.tag + " tarafından istendi"
+/**
+ * 
+ * @param {Discord.Client} client 
+ * @param {Discord.Message} message 
+ * @param {*} args 
+ * @param {*} param3 
+ * @returns 
+ */
+exports.run = async (client, message, args, { prefix }) => {
+    const bilgi = `Bir komut hakkında daha fazla almak için \`${prefix}yardım komutadı\` yazın.`, ornek = `Örneğin \`${prefix}yardım çeviri\` gibi.`,
+        footer = { iconURL: message.member.displayAvatarURL(), text: `${message.author.tag} tarafından istendi` }
+
+    const DAV_BUTON = new Discord.MessageButton().setLabel('Bot Davet').setStyle('LINK').setURL(client.davet)
+    const SW_BUTON = new Discord.MessageButton().setLabel('Destek Sunucusu').setStyle('LINK').setURL( client.sunucu )
+    const DAVET = new Discord.MessageActionRow().addComponents(DAV_BUTON, SW_BUTON)
 
     if (!args[0]) {
 
@@ -18,7 +29,7 @@ exports.run = (client, message, args, prefix) => {
                 : `• **${key}**: ${value.data.type === 3 ? "Mesaj" : "Kullanıcı"} tipi interaction\n`;
 
         for (const [key, value] of client.commands)
-            if (!value.sayi && !value.help.gizli)
+            if (typeof value !== "string" && !value.help.gizli)
                 description[value.tur] += `• **${prefix + key}**: ${value.help.description}\n`;
 
         const options = [{ label: "Ana Sayfa", description: "Ana sayfa, tüm kategorilerin listesi", value: "anasayfa", emoji: "📖" }, { label: "Mesajı sil", description: "Yardım menüsünü imha eder!", value: "sil", emoji: "⚠" }];
@@ -37,54 +48,63 @@ exports.run = (client, message, args, prefix) => {
             )
 
             embedler[tür] = new Discord.MessageEmbed().setDescription(description[tür])
-                .setTitle(`» ${türler[tür].emoji} ${türler[tür].ad} komutları:`).setAuthor({ name: baslık, iconURL: av })
-                .setColor(client.renk).setTimestamp().addField(bag, davet).addField(bilgi, ornek)
-                .setFooter({ iconURL: resim, text: isim })
+                .setTitle(`» ${türler[tür].emoji} ${türler[tür].ad} komutları:`)
+                .setTimestamp().addField(bilgi, ornek).setName("Yardım menüsü")
+
+                .setFooter(footer)
         }
 
 
         embedler.anasayfa = new Discord.MessageEmbed()
-            .setTitle("» Ana sayfa").setAuthor({ name: baslık, iconURL: av })
-            .addField(":book: Sayfalar:", description.anasayfa).setFooter({ iconURL: resim, text: isim })
-            .addField(':book: Kelime oyunu:', `\`${prefix}kelime\` Kelime oyunu başlatır. \`${prefix}kelimedur\` oyunu bitirir.`)
-            .setColor(client.renk).setTimestamp().addField(bag, davet).addField(bilgi, ornek)
+            .setTitle("» Ana sayfa").setName("Yardım menüsü")
+            .addField(":book: Sayfalar:", description.anasayfa).setFooter(footer)
+            .setTimestamp().addField(bilgi, ornek)
 
 
-        message.reply({
-            embeds: [embedler.anasayfa], components: [new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))]
-        }).then(m => 
-            client.on('interactionCreate', interaction => {
-                if (!interaction.isSelectMenu() || interaction.message.id !== m.id) return;
-                if (interaction.user.id !== message.author.id) return interaction.reply({ content: 'Komutu sen kullanmadığın için değiştiremezsin.', ephemeral: true })
+        const m = await message.reply({ embeds: [embedler.anasayfa], components: [DAVET, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
+        const collector = m.channel.createMessageComponentCollector({ message: m, time: 5 * 60_000 });
 
-                interaction.deferUpdate();
+        collector.on('collect', async interaction => {
+
+            if (interaction.user.id !== message.author.id) return interaction.reply({ content: 'Komutu sen kullanmadığın için değiştiremezsin.', ephemeral: true })
+            try {
+
+                await interaction.deferUpdate();
 
                 if (interaction.values[0] === "sil")
-                    return m.delete()
+                    return interaction.deleteReply()
                 else
-                    m.edit({ embeds: [embedler[interaction.values[0]]] })
+                    return interaction.editReply({ embeds: [embedler[interaction.values[0]]] })
 
-            })
-        )
+            } catch (e) {
+                console.log(e)
+            }
+
+        });
+
+
+        collector.on("end", c => m.edit({ components: [DAVET] }).catch(_=>_))
+
+
     } else {
+        let komut = client.commands.get(args[0].toLowerCase());
 
-        const komut = client.commands.get(args[0].toLowerCase());
+        if (typeof komut === "string")
+            komut = client.commands.get(komut);
 
         if (komut && !komut.help.gizli) {
-           
+
             const embed = new MessageEmbed()
-                .setAuthor({ name: baslık, iconURL: av })
-                .setTitle(`**${prefix + args[0]}** hakkında yardım`)
+                .setName("Yardım menüsü").setTitle(`**${prefix + args[0]}** hakkında yardım`)
                 .addField("Komut hakkında bilgi:", komut.help.description)
                 .addField("Komut kullanımı:", prefix + komut.help.usage)
                 .addField("Kategori:", türler[komut.tur].ad)
-                .setColor(client.renk)
-                .setFooter({ iconURL: resim, text: isim })
+
+                .setFooter(footer)
             return message.reply({ embeds: [embed] })
         } else {
-            const embed = new MessageEmbed().setFooter({ iconURL: resim, text: isim })
-                .setAuthor({ name: baslık, iconURL: av }).setColor(client.renk)
-                .setTitle(`» Böyle bir komut bulunamadı, tüm komutlara erişmek için \`${prefix}yardım\` yazın.`)
+            const embed = new MessageEmbed().setFooter(footer)
+                .setName("Yardım menüsü").setTitle(`» Böyle bir komut bulunamadı, tüm komutlara erişmek için \`${prefix}yardım\` yazın.`)
             return message.reply({ embeds: [embed] })
         }
     }

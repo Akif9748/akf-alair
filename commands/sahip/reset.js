@@ -1,17 +1,23 @@
 const Discord = require('discord.js');
 
-
-exports.run = (client, message, args) => {
-    if (!client.ayarlar.sahip.includes(message.author.id)) return message.reply(`Bu komutu sadece Bot Sahibi kullanabilir!`);
-
-    const embed = new Discord.MessageEmbed().setAuthor({ name: client.user.tag + " resetleniyor", iconURL: client.user.displayAvatarURL() })
-        .setDescription("**Açılış tarihi:** " + new Date(Date.now() - client.uptime).toLocaleString("tr"))
-        .setColor(client.renk).setTimestamp()
-    return message.channel.send({ embeds: [embed] }).then(() => process.exit(1))
+/**
+ * 
+ * @param {Discord.Client} client 
+ * @param {Discord.Message} message 
+ * @param {*} args 
+ * @returns 
+ */
+exports.run = async (client, message, args) => {
+    if (!message.member.isOwner()) return message.reply(`Bu komutu sadece Bot Sahibi kullanabilir!`);
+    const embed = new Discord.MessageEmbed().setName("resetleniyor")
+        .setDescription("**Açılış tarihi:** " + new Date(client.readyTimestamp).toLocaleString("tr"))
+        .setTimestamp()
+    await message.channel.send({ embeds: [embed] });
+    return process.exit(137);
 };
 
 exports.help = {
     name: 'reset',
     description: 'Botun sahibi botu resetler.',
-    usage: 'reset'
+    usage: 'reset', gizli: true
 };

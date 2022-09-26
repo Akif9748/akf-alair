@@ -1,48 +1,50 @@
-const Discord = require("discord.js"); // Discord.js'yi tanımladık.
-const { Rank } = require("canvacord");
-const { Member, User } = require("../../util/classes");
+const Discord = require("discord.js");
+const Canvas = require('canvas');
+
+const { User, parsenum } = require("../../util");
 
 exports.run = async (client, message, args) => {
-    if (message.channel.type == "DM") return
+
     const user = message.mentions.members.first() || message.member,
-        member = await new Member().getId(message.guild.id, user.id),
-        kul = await new User().getId(user.id),
-        renk = "#736FE9";
+        kul = await User(user.id),
+        member = kul.member(message.guildId);
 
-    // if (!swxp) return message.reply("Hiç puanın yok ki :(")
+    const canvas = Canvas.createCanvas(650, 450);
+    const context = canvas.getContext('2d');
 
-    const rank = new Rank()
-        .setAvatar(user.user.displayAvatarURL({ size: 512, format: "jpg" }))
-        .setCurrentXP(kul.xp)
-        .setRequiredXP(kul.required())
-        .setStatus(user.presence.status, true)
-        .setProgressBar("#FFFFFF", "COLOR")
-        .setUsername(user.user.username)
-        .setDiscriminator(user.user.discriminator)
-        .setLevel(kul.seviye, "seviye   ")
-        .setRank(0, "GLOBALDE", true)
-        .setBackground("COLOR", client.renk)
-        .setRankColor("WHITE", client.renk)
-        .setOverlay("BLACK", 0.1);
+    context.fillStyle = "#736FE9";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "white";
+    context.fillRect(0, 200, canvas.width, 10);
 
-    const swrank = new Rank()
-        .setCurrentXP(member.xp)
-        .setRequiredXP(member.required())
-        .setProgressBar("#FFFFFF", "COLOR")
 
-        .setStatus(user.presence.status, true)
-        .setAvatar(user.displayAvatarURL({ size: 512, format: "jpg" }))
-        .setUsername(user.displayName).setDiscriminator("0000", renk)
+    const avatar = await Canvas.loadImage(user.displayAvatarURL({ size: 256, format: "jpg" }));
+    context.drawImage(avatar, canvas.width - 200, 20, 180, 180);
 
-        .setLevel(member.seviye, "seviye   ", true)
-        .setRank(0, "SUNUCUDA", true).setRankColor("WHITE", renk)
-        .setBackground("COLOR", renk).setOverlay("BLACK", 0.1);
+    context.strokeRect(0, 0, canvas.width, canvas.height);
+    context.font = '40px Arial';
+    context.fillStyle = 'white';
+    context.fillText( "» " + message.guild.name, 20, 60);
+
+    context.font = '30px Arial';
+    context.fillText(`• Seviye: ${member.seviye}       • XP: ${member.xp}`, 20, 110);
+
+    context.font = '40px Arial';
+    context.fillText(`${user.user.username} • ` + (kul.harem ? "Premium" : "Alair"), 20, 250);
+    context.font = '30px Arial';
+    context.fillText(
+        `• Seviye: ${kul.seviye}       • XP: ${kul.xp}
+
+• Arduinolar: ${kul.arduino}
+
+• Para: ${parsenum(kul.para)}       • Eşi: ${kul.manita?.isim || "yok"}`, 20, 300);
+
+
 
 
     return message.reply({
         files: [
-            new Discord.MessageAttachment(await rank.build(), "global.png"),
-            new Discord.MessageAttachment(await swrank.build(), "server.png")
+            new Discord.MessageAttachment(canvas.toBuffer(), "seviye.png")
         ]
     });
 
@@ -50,7 +52,7 @@ exports.run = async (client, message, args) => {
 
 
 exports.help = {
-    name: ['seviye', "rank", "level"],
+    name: ['seviye', "rank", "level","profil", "bakiye", "envanter","cüzdan"],
     description: 'Level sorgulama!',
     usage: 'seviye @affansen'
 };

@@ -3,15 +3,16 @@ const fs = require("fs")
 exports.run = (client, message, args) => {
 
     const embed = new Discord.MessageEmbed()
-    .setTitle(`Yegane destekçilerimiz :heart:`)
-    .setDescription(fs.readFileSync("./util/tesekkur.md","utf-8"))
-    .setTimestamp().setColor(client.renk)
+        .setTitle(`Yegane destekçilerimiz :heart:`)
+        .setDescription(`[**${message.author.username}**](https://discord.com/users/${message.author.id}) (Alair seni cok seviyor, neden acaba ?? :heart:)\n`
+        +fs.readFileSync("./util/tesekkur.md", "utf-8"))
+        .setTimestamp()
 
-   return message.channel.send({embeds: [embed]});
+    return message.channel.send({ embeds: [embed] });
 }
 
 exports.help = {
-    name: ["teşekkür","adam"],
-    description: ":heart::heart::heart:Bot ve sahibinin yegane destekçileri:heart::heart::heart:",
+    name: ["teşekkür", "adam"],
+    description: ":heart::heart:Bot ve sahibinin yegane destekçileri:heart::heart:",
     usage: 'teşekkür'
 };

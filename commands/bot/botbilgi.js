@@ -1,35 +1,36 @@
 const Discord = require('discord.js');
-var os = require("os");
-var cpu = os.cpus()
-const { parsems } = require("../../util/classes")
-
-var pjson = require('../../package.json');
+const os = require("os");
+const cpu = os.cpus()
+const { parsems } = require("../../util")
 
 
-exports.run = (client, message, args, prefix) => {
+exports.run = (client, message, args, { prefix }) => {
   const count = client.guilds.cache.reduce((a, b) => a + b.memberCount, 0),
     usedMemory = process.memoryUsage().rss / 2 ** 20,
-    getpercentage = "%" + ((usedMemory / (os.totalmem() / 2 ** 20)) * 100).toFixed(2);
+    getpercentage = "%" + (usedMemory / (os.totalmem() / 2 ** 20) * 100).toFixed(2);
 
 
   const { interaction, komut } = client.ayarlar.kullanim;
   const embed = new Discord.MessageEmbed()
-    .setTitle(`» Tüm komutlara erişmek için \`${prefix}yardım\` yazın.`)
-    .setColor(client.renk)
-    .setAuthor({ name: `${client.user.username} • V${pjson.version}`, iconURL: client.user.avatarURL() })
-    .addField("» Sayılar:", `**• Sunucu:** ${client.guilds.cache.size}\n**• Kullanıcı:** ${client.users.cache.size} (${count})`, true)
-    .addField("» Sürüm:", `**• Node.js:** ${process.version}\n**• Discord.js:** v${Discord.version}\n**• Paketler:** ${Object.keys(pjson.dependencies).length}`, true)
+    .setTitle(`» Tüm komutlara erişmek için \`${prefix}yardım\` yazın.`).setName("V"+client.version)
+    .addField("» Sayılar:", `**• Sunucu:** ${client.guilds.cache.size}\n**• Kullanıcı:** ${client.users.cache.size} (${count})\n**• Ses kanalı:** ${client.voice.adapters.size}`, true)
+    .addField("» Sürüm:", `**• Node.js:** ${process.version}\n**• Discord.js:** v${Discord.version}`, true)
     .addField("» Sistem:", `**• RAM:** ${usedMemory.toFixed(2)}MB ${getpercentage}\n**• OS:** ${os.version().split(" ", 3).join(" ")} ${os.arch()}\n**• CPU:** ${cpu[0].model} **X${cpu.length}**`)
     .addField("» Çalıştırılma:", `**• Bot: **${parsems(client.uptime)}\n**• Sistem: **${parsems(os.uptime() * 1000)}`, false)
     .addField("» Kullanımlar:", `**• Komut: **${komut}\n**• Interaction: **${interaction}`, false)
-    .addField("» Sahip:", `[Akif#7304](https://discord.com/users/${client.ayarlar.sahip[0]})`, true)
-    .addField("» Bağlantılar:", `• [Davet Linki](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands) • [Destek Sunucusu](https://discord.gg/9cBnKmjzvH)`, true)
-  return message.channel.send({ embeds: [embed] });
+    .addField("» Sahip:", `[Akif#6820](https://discord.com/users/${client.ayarlar.sahip[0]})`, true)
+    
+
+  const DAV_BUTON = new Discord.MessageButton().setLabel('Bot Davet').setStyle('LINK').setURL(client.davet)
+  const SW_BUTON = new Discord.MessageButton().setLabel('Destek Sunucusu').setStyle('LINK').setURL( client.sunucu )
+  const DAVET = new Discord.MessageActionRow().addComponents(DAV_BUTON, SW_BUTON)
+
+  return message.channel.send({ embeds: [embed], components: [DAVET] });
 
 };
 
 exports.help = {
-  name: ['botbilgi', "bot"],
+  name: ['botbilgi', "bot", "istatistik"],
   description: 'Bot hakkında bilgiler verir.',
   usage: 'botbilgi'
 };
