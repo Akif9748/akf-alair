@@ -1,44 +1,34 @@
-const { Client, Collection } = require('discord.js'),//Client ve Collection Discorddan importlandı.
-  { readdirSync } = require("fs"), /* Dosya sistemi / classes dosyası: */
-  { ayarlar, token, ingilizce, intents } = require("./util/classes"),
-  client = new Client({ intents, partials: ["CHANNEL"] });//client
+console.info("[Kontrolcü] devrede!", "\n\x1b[31m\x1b[40m" + require('figlet').textSync("inos & akis works"), "\x1b[0m");
+const { fork } = require('child_process');
+const { MessageEmbed } = require('discord.js');
+const { kontrolcu } = require("./util/wh");
 
-client.ayarlar = ayarlar;
-client.renk = ayarlar.renk;
-client.commands = new Collection();
-client.interactions = new Collection();
+const SIGTERM_EMBED = new MessageEmbed().setTitle("`SIGTERM` sinyali!").setDescription("Kontrolcüden kapanışı isteniyor! Talep kabul edildi, kontrolcü yeniden açılıyor!").setColor("BLURPLE")
 
-//EVENT HANDLER:
-for (const file of readdirSync('./events'))
-  client.on(file.replace(".js", ""), (...args) => require(`./events/${file}`)(...args));
+process.on('SIGTERM', () => kontrolcu.send({ embeds: [SIGTERM_EMBED] }).then(_ => process.exit(143)).catch(console.error));
 
-//INTERACTION HANDLER:
-for (const file of readdirSync('./interactions')) {
-  const dosya = require(`./interactions/${file}`);
-  if (!dosya.data.type) dosya.data.type = 1;
-  client.interactions.set(dosya.data.name, dosya);
-}
+let hata = 0;
 
-//COMMAND HANDLER:
-for (const tur of readdirSync('./commands'))
-  for (const file of readdirSync(`./commands/${tur}/`)) { 
-    const dosya = require(`./commands/${tur}/${file}`);
-    let adlar = dosya.help.name;
-    if (!Array.isArray(adlar)) adlar = [adlar];
-    for (let sayi = 0; sayi < adlar.length; sayi++)
-      client.commands.set(adlar[sayi], { ...dosya, sayi, tur });
-  };
+(function create() {
+  fork("app").on("exit", code => {
+    create();
 
-//Toplam komut:
-console.log("Toplam", client.commands.size, "komut ve", client.interactions.size, "interaction hazır!");
+    console.log("[Kontrolcü]", code, "koduyla bitti, yeniden başlatılıyor!");
+    const embed = new MessageEmbed().setTitle(Math.random() > 0.5 ? "Düşürüldü!" : "Çakıldı!").setColor("RED").setAuthor({ name: "ASB - KONTROLCÜ" })
 
-//MongoDB bağlantısı:
-const mongoose = require('mongoose');
+    if (code === 137)
+      embed.setTitle("`SIGKILL` sinyali ile bitti!").setColor("DARK_GOLD")
+        .setDescription(`Geliştirici ekibi tarafından bota **${code}** koduyla zorunlu \`reset\` attırılıyor!`)
+    else
+      embed.setTitle("Yakalanamayan hata!").setDescription(`Bot \`${code}\` koduyla \`${++hata == 1 ? "ilk" : hata}\` kez düştü. Tekrar açılıyor!`)
 
-mongoose.connect('databasen', { useNewUrlParser: true }, () => console.log("Veritabanı bağlandı!"));
+    if (process.platform === "linux")
+      kontrolcu.send({ embeds: [embed] }).catch(console.error);
 
-//İngilizce çevirme fonksiyonu.
-String.prototype.toEn = ingilizce;
 
-//Token girişi, son. Made with Javascript and ❤
-client.login(token);
+  }).on("error", e => {
+    console.log("Hata:", e);
+    setTimeout(create, 200);
+  });
+
+})();
