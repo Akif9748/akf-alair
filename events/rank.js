@@ -1,32 +1,19 @@
-const { User, Member } = require("../util/classes");
+const { User } = require("../util");
 
 module.exports = async message => {
     const xpekle = Math.floor(Math.random() * 7) + 8;
-    const member = await new Member().getId(message.guild.id, message.author.id);
+
+    const user = await User(message.author.id);
+    const member = user.member(message.guildId);
 
     member.xp += xpekle
-    member.topxp += xpekle;
 
-    if (member.xp > member.required()) {
-        member.xp -= member.required();
-        member.seviye++;
-
-    };
-    member.write();
-
-    //VERİ TABANI PARÇA İKİ
-
-    const user = await new User().getId(message.author.id);
-    user.xp += xpekle;
-    user.topxp += xpekle;
-
-    if (user.xp > user.required()) {
+    if (member.xp > 100 + 50 * member.seviye) {
         user.para += Math.floor(Math.random() * 5000) + 2000;
-        user.xp -= user.required();
-        user.seviye++;
-
+        member.xp -= 100 + 50 * member.seviye;
+        member.seviye++;
     };
+    user.markModified("guilds." + message.guildId);
 
-    user.write();
-
+    await user.save();
 }

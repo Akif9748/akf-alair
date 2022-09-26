@@ -1,56 +1,64 @@
-const { Guild } = require("../util/classes"),
-    { prefix_def, duyuru } = require("../util/config.json"),
-    kelimeoyunu = require("./util/kelime"),
-    { KelimeModel, BlackListModel } = require("../util/models");
+const { Message } = require("discord.js"),
+    { duyuru } = require("../util/config.json"),
+    blokerler = require("./util/blokerler"),
+    { Guild } = require("../util");
 
+
+/**
+ * Alair alt katman dosyası / messageCreate.js
+ * @param {Message} message 
+ * @returns 
+ */
 module.exports = async message => {
-
-    if (message.author.bot) return;
-    message.content = message.content.replace(/\u200e/g, "");
+    if (message.author.bot || !["GUILD_TEXT", "GUILD_NEWS"].includes(message.channel.type) || message.client.blacklist.includes(message.author.id)) return;
+    message.content = message.content.replaceAll("\u200e", "");
     if (!message.content) return;
-    const guild = new Guild(message.guild?.id);
 
-    const kanal = message.channel.type !== "DM";
+    const { client, channelId, guildId, content } = message;
 
-    if (kanal) await guild.getId();
+    const guild = { prefix, kufur, caps, otokapa, reklam, blacklist } = await Guild(guildId);
 
-    const { client } = message;
-    if (guild.kufur) client.emit("kufur", message);
+    /* engelleyiciler */
+    if (!message.member.isAdmin()) {
+        if (kufur && await blokerler.kufur(message)) return;
+        if (caps && await blokerler.caps(message)) return;
+        if (reklam && await blokerler.reklam(message)) return;
+    }
 
-    const prefix = guild.prefix ?? prefix_def;
+    if (content.toLowerCase().startsWith(prefix.toLowerCase())
+        && (message.member.isAdmin() || !blacklist.includes(channelId))
+    ) {
+        const args = content.slice(prefix.length).split(/ +/g).filter(Boolean),
+            command = args.shift()?.toLowerCase(); //KOMUT ADI
 
-    if (message.content.startsWith(prefix) && (client.ayarlar.sahip.includes(message.author.id) || message.member.permissions.has("ADMINISTRATOR")|| !(await BlackListModel.findOne({ kanalid: message.channel.id })))) {
-
-        const args = message.content.slice(prefix.length).split(' ').filter(arg => !!arg),
-            command = args[0].toLowerCase() ?? null; //KOMUT ADI
         if (client.commands.has(command)) { //EĞER KOMUT VARSA
-            if (kanal) {
-                const member = message.guild.me
-                if (!member.permissions.has("EMBED_LINKS") || !member.permissionsIn(message.channel).has("EMBED_LINKS"))
-                    return message.reply("Embed mesaj gönderme yetkim kapalı.").catch(console.error)
 
-            }
+            if (!message.guild.me.perm("EMBED_LINKS"))
+                return message.reply("Embed mesaj gönderme yetkim kapalı.")
 
             try {
-                client.commands.get(command).run(client, message, args.slice(1), prefix);
-                message.channel.sendTyping();
+                let komut = client.commands.get(command);
+                if (typeof komut === "string")
+                    komut = client.commands.get(komut);
+
+                if (!komut.gizli)
+                    message.channel.sendTyping().catch(_ => _)
+
+                await komut.run(client, message, args, guild);
             } catch (e) {
-                console.error(e);
+                console.error("[Alt Katman İç Komut Hatası]\n",require('util').inspect(message, { depth: 0 }),"\nTam Hata:\n", e);
+                client.wh.asb.send(`⚠Alt Katman İç Komut Hatası, komut: ${command}\n\`\`\`js\n${e}\`\`\`\n*Konsolda daha fazla bilgi bulabilirsin!*`).catch(_=>_)
             } finally {
                 client.ayarlar.kullanim.komut++;
             }
 
         }
-    } else if (!kanal || !guild.otokapa)
-        client.emit("autoReply", prefix, message, false);
+    } else if (content===`<@${client.user.id}>` || content===`<@!${client.user.id}>`)
+        return await message.reply("Buyrun, komutlarımı **!yardım** yazarak öğrenebilirsiniz.");
 
+    else if (!otokapa) client.emit("autoReply", message, prefix);
 
-    if (!kanal) return; //Mesaj DM ise çalışmayacak:
-
-    if (message.channel.id === duyuru) message.react("✅").catch(console.error);
-    if (message.content.length > 3) client.emit("rank", message)//RANK
-
-
-
+    if (channelId === duyuru) message.react("🎉").catch(_ => _)
+    if (content.length > 3) client.emit("rank", message)//RANK
 
 }

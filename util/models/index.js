@@ -1,7 +1,6 @@
 const ButtonRolModel = require("./roleButton"),
     GuildModel = require("./guild"),
     UserModel = require("./user"),
-    Ceylin = require("./ceylin"),
     Custom = require("./custom");
 
 /**
@@ -9,5 +8,5 @@ const ButtonRolModel = require("./roleButton"),
  */
 module.exports = {
     GuildModel, ButtonRolModel,
-    UserModel, Custom, Ceylin
+    UserModel, Custom
 };

@@ -1,18 +1,34 @@
 const Discord = require('discord.js');
+const { User } = require("../util");
 
-module.exports = guild => {
+/**
+ * Alair alt katman dosyası / guildCreate.js
+ * @param {Discord.Guild} guild
+ * @returns 
+ */
+module.exports = async guild => {
+  const owner = await guild.fetchOwner();
+  
+  if (guild.ownerId) {
+    const kul = await User(guild.ownerId);
+    if (!kul.blacklist) return
+    await owner.send("Bu sunucunun kurucusu tam... neyse bosver ağza almaya gerek yok. O yüzden buraya giremem. Yani karalistemde var. ")
+    return await guild.leave();
+  }
   const client = guild.client;
   const embed = new Discord.MessageEmbed()
-    .setTitle(guild.name)
+    .setTitle(`Alair\'i ${guild.name}\'e eklediğin için teşekkürler!`)
     .setThumbnail(guild.iconURL())
-    .setDescription("Prefix değiştirmek için: `!prefix`\nHoş geldin mesajı açıp kapatmak için: `!hg`\nSunucuya log açmak için (Mesaj silme, düzenleme) `!log`\nOtomatik cevap (sa as) kapatmak için `!oto` \n**Yazabilirsiniz :)**")
-    .addField('Botu sunucunuza eklediğiniz için teşekkürler!', "**!yardım** komutu ile tüm komutları öğrenebilirsiniz.")
-    .addField('Bot davet linki:', '[Davet Linki](https://discord.com/api/oauth2/authorize?client_id=' + client.user.id + '&permissions=8&scope=bot%20applications.commands)')
-    .addField('Aynı zamanda botta herhangi bir hatayı, bota eklenmesini istediğiniz şeyleri, botla ilgili şikayetlerinizi iletmek için sunucumuza gelebilirsiniz.', '[Destek Sunucusu](https://discord.gg/9cBnKmjzvH)')
-    .setColor(client.ayarlar.renk)
+    .setDescription("Prefix değiştirmek için » `!prefix`\nOto-rol sistemini kullanmak için » `!otorol`\nHoş geldin mesajı açıp kapatmak için » `!hg`\nSunucuda log sistemini açmak için » `!log`\nOtomatik cevaplamayı (sa as) kapatmak için » `!oto` \nBot özellikleri hakkında daha fazla bilgi almak için » `!yardım`\n*komutlarını kullanabilirsiniz...*")
+    .addField('Alair\'in davet linki:', `[Davet Linki](${client.davet})`)
+    .addField('Botda gördüğünüz bir hatayı, şikayetlerinizi ve bota eklenmesini talep ettiğiniz şeyleri bildirmek için resmi destek sunucumuza gelebilirsiniz!', `[Destek Sunucusu](${client.sunucu})`)
     .setTimestamp()
+  const DAV_BUTON = new Discord.MessageButton().setLabel('Bot Davet').setStyle('LINK').setURL(client.davet)
+  const SW_BUTON = new Discord.MessageButton().setLabel('Destek Sunucusu').setStyle('LINK').setURL(client.sunucu)
+  const DAVET = new Discord.MessageActionRow().addComponents(DAV_BUTON, SW_BUTON)
 
-  guild.fetchOwner().then(owner => owner.send({ embeds: [embed] }).catch(console.error));
+  await owner?.send({ embeds: [embed], components: [DAVET] });
+
 
 
 }

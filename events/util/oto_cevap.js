@@ -1,20 +1,12 @@
-const { MessageEmbed, Message } = require('discord.js');
-
+const { Message } = require('discord.js');
 
 /**
- * Rastgele item getirir
- * @param {[String]} c İtemlerin arrayı
- * @returns {String} Rastgele item
- */
-const ra = arr => arr[Math.floor(Math.random() * arr.length)];
-/**
- * Alair otoCevap zekası: (Küçültülmüş)
+ * Alair otoCevap zekası:
  * @param {Message} msg 
  * @param {String} msj 
  * @returns 
  */
-module.exports = (msg, msj) => {
-
+module.exports = async (msg, msj) => {
     //MESAJ tek haneyse:
     if (msj.length === 1)
         return msg.reply("Sadece **" + msj + "** yani");
@@ -25,13 +17,11 @@ module.exports = (msg, msj) => {
 
     //EMOJIYSE:
     if (msj.length === 2)
-        return msg.reply(ra([msj, (msj.repeat(Math.floor(Math.random() * 6) + 2))]));
+        return msg.reply([msj, (msj.repeat(Math.floor(Math.random() * 6) + 2))].random());
 
 
     //TARİHİN ORUSPU ÇOCUKLARI:
     if (msj.includes("mete"))
         return msg.reply("MeTe hocam mı? Oruspu çocuğunun önde gidenidir :)");
 
-
 }
-

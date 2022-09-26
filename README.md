@@ -8,3 +8,8 @@ Küçültülmüş / Altyapı versiyon.
 
 ## Kanlı canlı versiyonunu eklemek için:
 https://akif9748.me/alair
+
+- SAYAÇ
+- KELİME
+- SAYI OYUN
+- CEYLİN

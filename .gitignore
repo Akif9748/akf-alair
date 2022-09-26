@@ -84,8 +84,3 @@ dist
 
 # Gatsby files
 .cache/
-
-util/config.json
-events/ready.js
-
-*.sqlite
