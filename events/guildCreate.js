@@ -10,7 +10,7 @@ module.exports = async guild => {
   const owner = await guild.fetchOwner();
   
   if (guild.ownerId) {
-    const kul = await User(guild.ownerId);
+    const kul = await User(guild.ownerId,"blacklist");
     if (!kul.blacklist) return
     await owner.send("Bu sunucunun kurucusu tam... neyse bosver ağza almaya gerek yok. O yüzden buraya giremem. Yani karalistemde var. ")
     return await guild.leave();

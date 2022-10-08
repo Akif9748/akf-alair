@@ -16,8 +16,8 @@ const türler = {
 };
 
 /* methods */
-const User = async userid => await UserModel.findOne({ userid }) || await UserModel.create({ userid });
-const Guild = async guildId => await GuildModel.findOne({ guildId }) || await GuildModel.create({ guildId });
+const User = async (userid, select = "") => await UserModel.findOne({ userid }, select) || await UserModel.create({ userid });
+const Guild = async (guildId, select = "") => await GuildModel.findOne({ guildId }, select) || await GuildModel.create({ guildId });
 const delay = ms => new Promise(r => setTimeout(r, ms));
 const parsems = sure => {
     const asr = ms(sure);
@@ -27,7 +27,7 @@ const parsems = sure => {
         `${asr.seconds} saniye`;
 
 }
-const parsenum = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+const parsenum = num => String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
 /**
  * Alair ana classes dosyası / Ara katman

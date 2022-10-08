@@ -5,32 +5,11 @@ const userSema = new mongoose.Schema({
     blacklist: Boolean,
 
     // numbers:
-    para: { type: Number, default: 0 },
+    para: { type: Number, default: 0, get: Math.floor },
     arduino: { type: Number, default: 0 },
-    times: {
-        arduino: { type: Number, default: null },
-        gunluk: { type: Number, default: null }
-    },
-
-    // harem:
-    harem: Boolean,
-    manitalar: [{
-        isim: String,
-        userid: String,
-        asr: { type: Date, default: Date.now }
-    }],
 
     // arrays:
-    guilds: { type: Object, default: {} },
-
-    manita: {
-        type: {
-            isim: String,
-            mesaj: String,
-            userid: String,
-            asr: Date
-        }, default: {}
-    }
+    guilds: { type: Object, default: {} }
 
 }, { versionKey: false });
 

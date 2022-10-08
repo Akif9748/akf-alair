@@ -13,7 +13,7 @@ exports.run = async (client, message, args, guild) => {
     } catch { };
 
     if (!kisi) return message.reply("Salağı etiketlemeyi unuttun!")
-    const kul = await User(kisi.id);
+    const kul = await User(kisi.id,"blacklist");
     kul.blacklist = !kul.blacklist;
     await kul.save()
     await client.userBlock()

@@ -5,4 +5,4 @@ module.exports = mongoose.model('custom', new mongoose.Schema({
     authorid: String,
     key: String,
     value: String
-}, { versionKey: false, }));
+}, { versionKey: false }));
