@@ -20,10 +20,10 @@
     "@discordjs/builders": "^0.8.2",
     "@discordjs/rest": "^0.1.0-canary.0",
     "async-g-i-s": "^1.2.0",
-    "canvas": "^2.8.0",
+    "canvas": "^2.10.1",
     "discord.js": "^13.11.0",
     "figlet": "^1.5.2",
-    "mongoose": "^6.6.2",
+    "mongoose": "^6.6.5",
     "parse-ms": "^2.1.0",
     "turkce": "^1.1.1",
     "yt-search": "^2.10.3"
