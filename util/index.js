@@ -16,8 +16,8 @@ const türler = {
 };
 
 /* methods */
-const User = async (userid, select = "") => await UserModel.findOne({ userid }, select) || await UserModel.create({ userid });
-const Guild = async (guildId, select = "") => await GuildModel.findOne({ guildId }, select) || await GuildModel.create({ guildId });
+const User = async (_id, select = "") => await UserModel.findById(_id, select) || await UserModel.create({ _id });
+const Guild = async (_id, select = "") => await GuildModel.findById(_id, select) || await GuildModel.create({ _id });
 const delay = ms => new Promise(r => setTimeout(r, ms));
 const parsems = sure => {
     const asr = ms(sure);

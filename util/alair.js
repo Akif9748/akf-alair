@@ -66,8 +66,8 @@ module.exports = class Alair extends Discord.Client {
             kisi.blacklist = true;
             await kisi.save();
         }
-        const kisiler = await UserModel.find({ blacklist: true }, "blacklist");
-        this.blacklist = kisiler.map(kisi => kisi.userid);
+        const kisiler = await UserModel.find({ blacklist: true }, "_id");
+        this.blacklist = kisiler.map(kisi => kisi._id);
         return this.blacklist;
     }
 

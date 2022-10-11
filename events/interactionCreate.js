@@ -1,4 +1,4 @@
-const { ButtonRolModel } = require("../util/models/")
+const { ButtonRole } = require("../util/models/")
 const Discord = require('discord.js');
 
 /**
@@ -16,18 +16,17 @@ module.exports = async interaction => {
 
         if (["rolbuton", "rolsil"].includes(interaction.customId)) {
             try {
-                const buton = await ButtonRolModel.findOne({ messageid: interaction.message.id });
+                const buton = await ButtonRole.findById(interaction.message.id)
                 if (!buton) return;
 
                 if (interaction.customId === "rolsil") {
-                    if (interaction.member.id == buton.authorid) {
+                    if (interaction.member.id !== buton.authorId) return;
+                    await buton.remove();
+                    return interaction.message.delete();
 
-                        await ButtonRolModel.deleteOne({ messageid: interaction.message.id });
-                        return interaction.message.delete();
-                    }
                 }
                 else
-                    return await require("../buttons/rol")(interaction, buton.rolid, buton.authorid);
+                    return await require("../buttons/rol")(interaction, buton.roleId);
 
             } catch (e) { console.error(e) }
 

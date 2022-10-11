@@ -7,11 +7,11 @@ exports.run = async (client, message, args) => {
 
     const get = id => client.users.cache.get(id)?.tag || "~~" + id + "~~";
 
-    const veri = await UserModel.find().sort({ para: -1 }).select("para userid").limit(30);
+    const veri = await UserModel.find().sort({ para: -1 }).select("para").limit(30);
 
 
     const gonder = veri.map((rank, index) =>
-        `**${index + 1}.** ${get(rank.userid)} • ATC: **${parsenum(rank.para)}**`
+        `**${index + 1}.** ${get(rank._id)} • ATC: **${parsenum(rank.para)}**`
     )
 
     const embeds = [       new MessageEmbed()
