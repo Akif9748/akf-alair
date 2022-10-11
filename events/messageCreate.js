@@ -16,7 +16,7 @@ module.exports = async message => {
 
     const { client, channelId, guildId, content } = message;
 
-    const guild = { prefix, kufur, caps, otokapa, reklam, blacklist } = await Guild(guildId);
+    const guild = { prefix, kufur, caps, oto, reklam, blacklist } = await Guild(guildId);
 
     /* engelleyiciler */
     if (!message.member.isAdmin()) {
@@ -56,7 +56,7 @@ module.exports = async message => {
     } else if (content===`<@${client.user.id}>` || content===`<@!${client.user.id}>`)
         return await message.reply("Buyrun, komutlarımı **!yardım** yazarak öğrenebilirsiniz.");
 
-    else if (!otokapa) client.emit("autoReply", message, prefix);
+    else if (oto) client.emit("autoReply", message, prefix);
 
     if (channelId === duyuru) message.react("🎉").catch(_ => _)
     if (content.length > 3) client.emit("rank", message)//RANK

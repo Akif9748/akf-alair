@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
-const { defaultPrefix } = require("../config.json")
+const { prefix } = require("../config.json")
 const guildSema = new mongoose.Schema({
 
     //MAIN: 
-    guildId: { type: String, unique: true },
+    _id: { type: String, unique: true },
 
     //ARRAYLAR
-    blacklist: { type: [String], default: [] },
+    blacklist: [String],
 
     //STRINGLER
-    prefix: { type: String, default: defaultPrefix },
+    prefix: { type: String, default: prefix },
 
-    otokapa: { type: Boolean, default: true },
+    oto: Boolean,
     kufur: Boolean,
     caps: Boolean,
     reklam: Boolean
