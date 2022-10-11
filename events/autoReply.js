@@ -59,7 +59,7 @@ module.exports = async (msg, prefix, komut) => {
     .toLocaleLowerCase("tr").trim();
 
 
-  const sonuc = await Custom.findOne({ guildId, key: msj });
+  const sonuc = await Custom.findOne({ guildId, key: msj }, "key value");
   if (sonuc) return await msg.reply(sonuc.value);
 
 

@@ -7,7 +7,10 @@ const userSema = new mongoose.Schema({
     // numbers:
     para: { type: Number, default: 0, get: Math.floor },
     arduino: { type: Number, default: 0 },
-
+    times: {
+        arduino: Date,
+        gunluk: Date
+    },
     // arrays:
     guilds: { type: Object, default: {} }
 

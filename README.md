@@ -23,7 +23,7 @@ Tamamen özelleştirilebilir. Alair baz sistemden getirilen bazı özellikler:
 - **oto_cevap 2. katman**: Bu ise botun `sor` komutu için. (minor)
 - **Sunucuya katılınca atılan mesaj.** Minor. Merkez sunucuya gelene verilen rol yok.
 - **Rank** sistemi. Tüm özellikleriyle. Sunucudakilerin rankını sıralama da dahil.
-- **Ekonomi** (minor) sistem. Para ve sıralaması var.
+- **Ekonomi** (minor) sistem. Para, arduino al sat, bahis, gönder, günlük ve sıralaması var.
 - **Komuta göre otomatik renderleyen yardım komutu**
 - **Bot-Bilgi**
 - **Çeşitli** komutlardan 2 tane bizim modüllerimizle yapılan komut, `ara` ve `tdk`.
