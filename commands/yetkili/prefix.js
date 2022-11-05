@@ -1,18 +1,18 @@
-
+const { hata } = require("../../util");
 exports.run = async (client, message, args, guild) => {
 
     if (!message.member.isAdmin())
-        return message.channel.send('Üzgünüm, buna yetkin yok :grinning:')
+        return message.reply('Üzgünüm, buna yetkin yok :grinning:')
 
-    if (!args[0]) return message.reply("Geçerli bir ön ek girdiğinizden emin olun.")
+    if (!args[0]) return message.reply(hata(this, guild.prefix) + "Geçerli bir ön ek girdiğinizden emin olun.")
 
     if (args[0] == "!") {
         guild.prefix = "!";
-     await message.channel.send("Prefix artık **varsayılan** olan **!**")
+        await message.reply("Prefix artık **varsayılan** olan **!**")
 
     } else {
         guild.prefix = args[0];
-        await message.channel.send("Prefix artık **" + guild.prefix + "**")
+        await message.reply("Prefix artık **" + guild.prefix + "**")
 
     }
     await guild.save()
@@ -22,5 +22,5 @@ exports.run = async (client, message, args, guild) => {
 exports.help = {
     name: "prefix",
     description: 'Prefixi değiştirmek içindir.',
-    usage: 'prefix'
+    usage: 'prefix <prefix>'
 };

@@ -9,10 +9,12 @@ module.exports = async client => {
 
   setInterval(() => client.user.setPresence({ activities: [{ type: "LISTENING", name: client.guilds.cache.size + " sunucuyla /yardım'ı" }], status: 'dnd' }), 60_000 * 2)
 
+
+  if (process.platform !== "linux") return;
+
   const embed = new MessageEmbed().setAuthor({ name: client.user.username, iconURL: client.user.avatarURL() })
     .setTitle(`Tekrardan hazır!`).setColor("GREEN").setDescription(`${os.cpus()[0].model} üzerinde, \`${Date.now() - client.ayarlar.start}ms\` içinde hazırlandı!`)
 
-  if (process.platform === "linux")
   await client.wh.kontrolcu.send({ embeds: [embed] })
 
 

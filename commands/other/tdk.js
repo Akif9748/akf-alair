@@ -1,15 +1,16 @@
 const Discord = require("discord.js");
 const turkce = require("turkce");
+const { hata } = require("../../util")
 
-exports.run = async (client, message, args) => {
-    if (!args[0]) return message.reply('Bir kelime girmelisin.')
+exports.run = async (client, message, args, { prefix }) => {
+    if (!args[0]) return message.reply(hata(this, prefix) + 'Bir kelime girmelisin.')
 
 
     try {
 
         const sonuc = await turkce(args[0]);
-        if (!sonuc) return message.reply("Kelime yok!")
-        const { kelime, anlam, lisan, ornek, atasozu }= sonuc;
+        if (!sonuc) return message.reply("TDK'de böyle bir kelime yok!")
+        const { kelime, anlam, lisan, ornek, atasozu } = sonuc;
         const embed = new Discord.MessageEmbed()
             .setColor('#ff0000')
             .setThumbnail('https://upload.wikimedia.org/wikipedia/commons/5/51/Türk_Dil_Kurumu_logo.png')
@@ -28,7 +29,7 @@ exports.run = async (client, message, args) => {
 
         if (atasozu)
             embed.addField('Atasözü:', atasozu)
-       
+
         if (!embed.fields.length) return message.reply("Kelime hakkında yeterli bilgi yok!")
 
         return message.reply({ embeds: [embed] })
@@ -41,5 +42,5 @@ exports.run = async (client, message, args) => {
 exports.help = {
     name: 'tdk',
     description: 'TDK apisini kullanarak yazdığınız kelime hakkında bilgi verir.',
-    usage: 'tdk kelime'
+    usage: 'tdk <kelime>'
 };

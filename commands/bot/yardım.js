@@ -62,7 +62,7 @@ exports.run = async (client, message, args, { prefix }) => {
 
 
         const m = await message.reply({ embeds: [embedler.anasayfa], components: [DAVET, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
-        const collector = m.channel.createMessageComponentCollector({ message: m, time: 5 * 60_000 });
+        const collector = m.createMessageComponentCollector({ idle: 5 * 60_000 });
 
         collector.on('collect', async interaction => {
 
@@ -113,5 +113,5 @@ exports.run = async (client, message, args, { prefix }) => {
 exports.help = {
     name: ['yardım', "komutlar"],
     description: 'Komutlar hakkında bilgi verir.',
-    usage: 'yardım'
+    usage: 'yardım [komut adı]'
 };

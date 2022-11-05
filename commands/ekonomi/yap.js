@@ -8,13 +8,13 @@ module.exports = {
     },
 
     async run(client, message, args) {
-        const user = { times } = await User(message.author.id, "times.arduino arduino"),
+        const user = await User(message.author.id, "times.arduino arduino"),
             sure = 1000 * 60 * 2,
             asr = Date.now();
 
 
-        if (times?.arduino && sure - (asr - times.arduino) > 0)
-            return message.channel.send(`Bunu şu süre boyunca yapamazsın: ${parsems(sure - (asr - times.arduino))}`)
+        if (user.times?.arduino && sure - (asr - user.times.arduino) > 0)
+            return message.reply(`Bunu şu süre boyunca yapamazsın: ${parsems(sure - (asr - user.times.arduino))}`)
 
 
         const amount = Math.floor(Math.random() * 5) + 1;

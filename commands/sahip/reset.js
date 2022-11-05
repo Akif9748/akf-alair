@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
     const embed = new Discord.MessageEmbed().setName("resetleniyor")
         .setDescription("**Açılış tarihi:** " + new Date(client.readyTimestamp).toLocaleString("tr"))
         .setTimestamp()
-    await message.channel.send({ embeds: [embed] });
+    await message.reply({ embeds: [embed] });
     return process.exit(137);
 };
 

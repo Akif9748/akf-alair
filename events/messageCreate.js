@@ -16,8 +16,8 @@ module.exports = async message => {
     if (!message.content) return;
 
     const { client, channelId, guildId, content } = message;
-
-    const guild = { prefix, kufur, caps, oto, blacklist } = await Guild(guildId);
+    const guild = await Guild(guildId);
+    const { prefix, kufur, caps, oto, blacklist } = guild;
 
     /* engelleyiciler */
     if (!message.member.isAdmin()) {
@@ -42,11 +42,12 @@ module.exports = async message => {
             if (!message.guild.me.perm("EMBED_LINKS"))
                 return message.reply("Embed mesaj gönderme yetkim kapalı.")
 
-            try {
-                let komut = client.commands.get(command);
-                if (typeof komut === "string")
-                    komut = client.commands.get(komut);
+            let komut = client.commands.get(command);
 
+            if (typeof komut === "string")
+                komut = client.commands.get(komut);
+
+            try {
                 if (!komut.gizli)
                     message.channel.sendTyping().catch(_ => _)
                 sonkomut[message.author.id] = Date.now();
@@ -56,6 +57,7 @@ module.exports = async message => {
                 console.error("[Alt Katman İç Komut Hatası]\n", require('util').inspect(message, { depth: 0 }), "\nTam Hata:\n", e);
                 client.wh.asb.send(`⚠Alt Katman İç Komut Hatası, komut: ${command}\n\`\`\`js\n${e}\`\`\`\n*Konsolda daha fazla bilgi bulabilirsin!*`).catch(_ => _)
             } finally {
+                komut.kullanim++;
                 client.ayarlar.kullanim.komut++;
             }
 

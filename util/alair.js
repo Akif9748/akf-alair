@@ -72,7 +72,7 @@ module.exports = class Alair extends Discord.Client {
     }
     async userBlock(_id) {
         if (_id) {
-            const kisi = await User(_id, "blacklist");
+            const kisi = await UserModel.findById(_id, "blacklist");
             kisi.blacklist = true;
             await kisi.save();
         }

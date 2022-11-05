@@ -8,7 +8,7 @@ exports.run = (client, message, args) => {
         +fs.readFileSync("./util/tesekkur.md", "utf-8"))
         .setTimestamp()
 
-    return message.channel.send({ embeds: [embed] });
+    return message.reply({ embeds: [embed] });
 }
 
 exports.help = {

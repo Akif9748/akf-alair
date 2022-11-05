@@ -1,18 +1,19 @@
 const Discord = require('discord.js');
 const emojiler = ["0️⃣", '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
-const { delay } = require("../../util")
+const { delay, hata } = require("../../util")
 
-exports.run = async (client, message, args) => {
+exports.run = async (client, message, args, { prefix }) => {
 
   const sayı = Number(args[0]), anket = args.slice(1).join(" ")
 
-  if (!sayı || !anket) return message.reply('Şık sayısını veya anketi unuttun! Unutma, en az 1, en fazla 9 şık seçeneğin var. Doğru kullanım: `!anket 2 deneme`');
+  if (!sayı || !anket)
+    return message.reply(`${hata(this, prefix)}Şık sayısını veya anketi unuttun! Unutma, en az 1, en fazla 9 şık seçeneğin var.`);
 
   const embed = new Discord.MessageEmbed()
     .setTitle(message.author.tag + ' başlattığı oylama:')
-    .setDescription("```"+anket+"```")
+    .setDescription("```" + anket + "```")
     .setName("Anket sistemi");
-    
+
   if (sayı == 1) {
     const msg = await message.channel.send({ embeds: [embed.setFooter({ text: ' ✅ Haydi oyla! ⛔ ' })] })
     await msg.react('✅')
@@ -34,7 +35,7 @@ exports.run = async (client, message, args) => {
 
 };
 exports.help = {
-  name: ['anket',"oyla"],
+  name: ['anket', "oyla"],
   description: 'Anket oluşturur!',
-  usage: 'anket (Şık sayısı) Deneme'
+  usage: 'anket <şık sayısı> [anket]'
 };

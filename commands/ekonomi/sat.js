@@ -1,24 +1,24 @@
-const { User, emoji } = require("../../util");
+const { User, emoji, hata, random } = require("../../util");
 
 module.exports = {
 
     help: {
         name: ["arduinosat", "sat"],
         description: "Elindeki Arduinoları satarsın",
-        usage: 'arduinosat miktar'
+        usage: 'arduinosat <miktar>'
     },
 
-    async run(client, message, args) {
+    async run(client, message, args,{prefix}) {
         const kul = await User(message.author.id,"arduino para");
-        let { arduino = 0 } = kul;
-        if (!arduino) return message.channel.send('Hiç Arduinon yok ki, B R U H')
+        let { arduino } = kul;
+        if (!arduino) return message.reply('Hiç Arduinon yok ki, B R U H')
 
         let sayi = Number(args[0]);
-        if (!sayi) return message.channel.send('Satılacak Arduino sayısı yazın.')
+        if (!sayi) return message.reply(`${hata(this, prefix)}Satılacak miktarı belirtmelisin. Elinde ${arduino} arduino var.`)
 
-        if (sayi > arduino) return message.channel.send(`Elinde sadece ${arduino} arduino var ama.`);
+        if (sayi > arduino) return message.reply(`Elinde sadece ${arduino} arduino var ama.`);
 
-        let fiyat = (Math.floor(Math.random() * 500) + 500) * sayi;
+        let fiyat = random(500, 1000) * sayi;
 
         kul.arduino -= sayi;
         kul.para += fiyat;
