@@ -5,8 +5,8 @@ const fs = require("fs")
 const body = fs.readdirSync("./interactions").map(command => require("./interactions/" + command).data);
 
 
-//REST APIYE 9. versiyon üzerinden token veriliyor
-const rest = new REST({ version: '9' }).setToken(token);
+//REST APIYE 10. versiyon üzerinden token veriliyor
+const rest = new REST().setToken(token);
 
 
 //Asenkron olarak!

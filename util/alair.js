@@ -87,8 +87,8 @@ module.exports = class Alair extends Discord.Client {
 /* alair-embed */
 
 class MessageEmbed extends Discord.MessageEmbed {
-    constructor(opts, notAuth = false) {
-        super(opts);
+    constructor(notAuth = false) {
+        super();
         this.setColor(renk);
         if (!notAuth)
             this.setAuthor({ iconURL, name });
