@@ -22,7 +22,7 @@ Discord.GuildMember.prototype.isAdmin = function () {
     return this.perm("ADMINISTRATOR");
 }
 
-/* modejs-prototype */
+/* nodejs-prototype */
 
 Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)]
@@ -60,9 +60,9 @@ module.exports = class Alair extends Discord.Client {
         });
 
     }
-    async userBlock(userid) {
-        if (userid) {
-            const kisi = await User(userid, "blacklist");
+    async userBlock(_id) {
+        if (_id) {
+            const kisi = await User(_id, "blacklist");
             kisi.blacklist = true;
             await kisi.save();
         }
