@@ -1,7 +1,8 @@
 const { Message } = require("discord.js"),
     { duyuru } = require("../util/config.json"),
     blokerler = require("./util/blokerler"),
-    { Guild } = require("../util");
+    { Guild } = require("../util"),
+    sonkomut = {};
 
 
 /**
@@ -25,8 +26,14 @@ module.exports = async message => {
         if (reklam && await blokerler.reklam(message)) return;
     }
 
-    if (content.toLowerCase().startsWith(prefix.toLowerCase())
-        && (message.member.isAdmin() || !blacklist.includes(channelId))
+    if (
+        content.toLowerCase().startsWith(prefix.toLowerCase())
+        && (message.member.isAdmin() ||
+            (
+                (!sonkomut[message.author.id] || sonkomut[message.author.id] < Date.now() - 1500) &&
+                !blacklist.includes(channelId)
+            )
+        )
     ) {
         const args = content.slice(prefix.length).split(/ +/g).filter(Boolean),
             command = args.shift()?.toLowerCase(); //KOMUT ADI
@@ -43,17 +50,18 @@ module.exports = async message => {
 
                 if (!komut.gizli)
                     message.channel.sendTyping().catch(_ => _)
+                sonkomut[message.author.id] = Date.now();
 
                 await komut.run(client, message, args, guild);
             } catch (e) {
-                console.error("[Alt Katman İç Komut Hatası]\n",require('util').inspect(message, { depth: 0 }),"\nTam Hata:\n", e);
-                client.wh.asb.send(`⚠Alt Katman İç Komut Hatası, komut: ${command}\n\`\`\`js\n${e}\`\`\`\n*Konsolda daha fazla bilgi bulabilirsin!*`).catch(_=>_)
+                console.error("[Alt Katman İç Komut Hatası]\n", require('util').inspect(message, { depth: 0 }), "\nTam Hata:\n", e);
+                client.wh.asb.send(`⚠Alt Katman İç Komut Hatası, komut: ${command}\n\`\`\`js\n${e}\`\`\`\n*Konsolda daha fazla bilgi bulabilirsin!*`).catch(_ => _)
             } finally {
                 client.ayarlar.kullanim.komut++;
             }
 
         }
-    } else if (content===`<@${client.user.id}>` || content===`<@!${client.user.id}>`)
+    } else if (content === `<@${client.user.id}>` || content === `<@!${client.user.id}>`)
         return await message.reply("Buyrun, komutlarımı **!yardım** yazarak öğrenebilirsiniz.");
 
     else if (oto) client.emit("autoReply", message, prefix);
