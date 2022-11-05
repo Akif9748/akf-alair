@@ -22,6 +22,16 @@ Discord.GuildMember.prototype.isAdmin = function () {
     return this.perm("ADMINISTRATOR");
 }
 
+Discord.Message.prototype.üye = function () {
+    const args = this.content.split(/ +/g).filter(Boolean).slice(1);
+
+    return this.mentions.members.first() ||
+        this.guild.members.cache.get(args[1]) ||
+        this.guild.members.cache.find(m => m.displayName.toLowerCase() === args.join(" ").toLowerCase()) ||
+        this.member;
+
+}
+
 /* nodejs-prototype */
 
 Array.prototype.random = function () {

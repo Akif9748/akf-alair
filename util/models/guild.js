@@ -13,8 +13,7 @@ const guildSema = new mongoose.Schema({
 
     oto: Boolean,
     kufur: Boolean,
-    caps: Boolean,
-    reklam: Boolean
+    caps: Boolean
 
 
 }, { versionKey: false });
