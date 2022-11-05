@@ -40,7 +40,7 @@ const herTurlu = {
     files: ["https://cdn.discordapp.com/attachments/841640767600721950/898641696865267762/E25SCjtWYAQTJj3.png"]
   }
 }
-
+const sonkomut = {};
 /**
  * Alair sor komutu
  * @param {Message} msg Mesaj objesi
@@ -50,7 +50,8 @@ const herTurlu = {
  */
 module.exports = async (msg, prefix, komut) => {
   const { channel, client, guild, guildId, content, mentions } = msg;
-
+  if (!komut && sonkomut[msg.author.id] && sonkomut[msg.author.id] > Date.now() - 3000)
+    return;
   if (!guild.me.perm("EMBED_LINKS") || !guild.me.permissionsIn(channel).has("EMBED_LINKS"))
     return await msg.reply("Embed mesaj gönderme yetkim kapalı.").catch(_ => _);
 
@@ -86,7 +87,7 @@ module.exports = async (msg, prefix, komut) => {
    */
   if ((mentions.has(client.user) || komut) && (kufur.some(word => (" " + msj + " ").includes(" " + word + " ")) || kufur.some(word => msg.content.toLowerCase() == word)))
     return await msg.reply(sovgu.random())
-
+  sonkomut[msg.author.id] = Date.now();
   try {
     if (content.startsWith(`<@!${client.user.id}>`) || content.startsWith(`<@${client.user.id}>`) || komut)
       await otoCevap(msg, msj);
