@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
-let Models = require("../../util/models")
-let {User, Guild} = require("../../util/")
+let Models = require("../../util/models");
+let { User, Guild } = require("../../util/");
+const cp = require("child_process").execSync;
 exports.run = async (client, message, args, _guild) => {
   if (!message.member.isOwner()) return;
-  //message.reply(`Bu komut ancak yegane kişiler içindir!\n${client.ayarlar.sahip.map(u => "<@" + u + ">").join(", ")}`);
   let user = id => client.users.cache.get(id);
   let guild = id => client.guilds.cache.get(id);
   let member = id => message.guild.members.cache.get(id);
@@ -14,10 +14,12 @@ exports.run = async (client, message, args, _guild) => {
     let kod = args.join(" ");
     if (!kod) return message.reply(`Deneyebilmek için bir kod girmelisin!
     \`\`\`js
+    const Discord = require("discord.js");
     let Models = require("../../util/models");
-    let {User, Guild} = require("../../util/");
-
+    let { User, Guild } = require("../../util/");
+    const cp = require("child_process").execSync;
     exports.run = async (client, message, args, _guild) => {
+      if (!message.member.isOwner()) return;
       let user = id => client.users.cache.get(id);
       let guild = id => client.guilds.cache.get(id);
       let member = id => message.guild.members.cache.get(id);
@@ -32,7 +34,7 @@ exports.run = async (client, message, args, _guild) => {
       sonuc = require('util').inspect(sonuc, { depth: 0 });
 
 
-    return message.channel.send({
+    return message.reply({
       embeds: [
         embed
           .addField('» Kod', `\`\`\`js\n${kod}\`\`\``)
@@ -40,7 +42,7 @@ exports.run = async (client, message, args, _guild) => {
       ]
     })
   } catch (e) {
-    return message.channel.send({ embeds: [embed.addField('» Hata', "\`\`\`js\n" + e + "\n\`\`\`")] });
+    return message.reply({ embeds: [embed.addField('» Hata', `\`\`\`js\n${e}\n\`\`\``)] });
   }
 }
 
@@ -49,5 +51,5 @@ exports.run = async (client, message, args, _guild) => {
 exports.help = {
   name: ['test', "eval", "kod"],
   description: 'Kod denemeyi sağlar.',
-  usage: 'test kod', gizli: true
+  usage: 'test <kod>', gizli: true
 };

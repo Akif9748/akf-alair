@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const Canvas = require('canvas');
+const Canvas = require('@napi-rs/canvas');
 
 const { User, parsenum } = require("../../util");
 

@@ -1,11 +1,9 @@
-// ASB ZONE
 const { asb } = require("./util/wh");
-
 process.on("uncaughtException", err => {
 
-  if (err.message.includes("abort") || err.message.includes("YouTube")) return;
 
   console.error("[uncaughtException]", err);
+  if (err.message.includes("abort") || err.message.includes("Unknown interaction") || err.message.includes("YouTube")) return;
 
   asb.send(`🔴**YAKALANAMAYAN KRİTİK HATA**\n\`\`\`js\n${err.stack || err}\`\`\``).then(m => process.exit(1)).catch(e => {
     console.error("[webhook-hatası]", e);
@@ -13,7 +11,6 @@ process.on("uncaughtException", err => {
   });
 
 });
-
 
 const { Alair } = require('./util'),
   mongoose = require('mongoose'), //Database
@@ -47,8 +44,8 @@ for (const tur of readdirSync('./commands'))
     const dosya = require(`./commands/${tur}/${file}`);
     let adlar = dosya.help.name;
     if (!Array.isArray(adlar)) adlar = [adlar];
-    adlar.forEach((ad, sayi) => client.commands.set(ad, sayi ? adlar[0] : { ...dosya, file, sayi, tur }));
-  };
+    adlar.forEach((ad, sayi) => client.commands.set(ad, sayi ? adlar[0] : { ...dosya, file, sayi, tur, kullanim: 0 }));
+  }
 
 //Toplam komut:
 console.log("Toplam", client.commands.size, "komut ve", client.interactions.size, "interaction hazır!");
