@@ -50,7 +50,7 @@ const sonkomut = {};
  */
 module.exports = async (msg, prefix, komut) => {
   const { channel, client, guild, guildId, content, mentions } = msg;
-  if (!komut && sonkomut[msg.author.id] && sonkomut[msg.author.id] > Date.now() - 3000)
+  if (!komut && !msg.member.isAdmin() && sonkomut[msg.author.id] && sonkomut[msg.author.id] > Date.now() - 3000)
     return;
   if (!guild.me.perm("EMBED_LINKS") || !guild.me.permissionsIn(channel).has("EMBED_LINKS"))
     return await msg.reply("Embed mesaj gönderme yetkim kapalı.").catch(_ => _);

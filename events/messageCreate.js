@@ -17,13 +17,12 @@ module.exports = async message => {
 
     const { client, channelId, guildId, content } = message;
 
-    const guild = { prefix, kufur, caps, oto, reklam, blacklist } = await Guild(guildId);
+    const guild = { prefix, kufur, caps, oto, blacklist } = await Guild(guildId);
 
     /* engelleyiciler */
     if (!message.member.isAdmin()) {
         if (kufur && await blokerler.kufur(message)) return;
         if (caps && await blokerler.caps(message)) return;
-        if (reklam && await blokerler.reklam(message)) return;
     }
 
     if (

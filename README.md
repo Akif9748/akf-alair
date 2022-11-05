@@ -11,6 +11,13 @@ Küçültülmüş / Altyapı versiyon.
 ## Kanlı canlı versiyonunu eklemek için:
 https://akif9748.me/alair
 
+## Komut yardım açıklamaları:
+```
+prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
+Örnek:
+!ban <@kullanıcı> [sebep]
+```
+
 ## Özellik bildirimleri:
 Tamamen özelleştirilebilir. Alair baz sistemden getirilen bazı özellikler:
 - **Alair-Client**, **Alair-Embed** aktarıldı. 
