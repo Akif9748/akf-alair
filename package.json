@@ -1,6 +1,6 @@
 {
   "name": "alair",
-  "version": "7.12.1",
+  "version": "8.6.1",
   "description": "Alair Bot",
   "main": "index.js",
   "scripts": {
