@@ -2,8 +2,8 @@ const Discord = require("discord.js");
 const { MessageActionRow, MessageButton } = Discord;
 /**
  * 
- * @param {Discord.Message} message 
- * @param {Discord.MessageOptions} reply 
+ * @param {import("discord.js").Message} message 
+ * @param {import("discord.js").MessageOptions} reply 
  * @param {number} son 
  * @param {function} callback
  */
@@ -80,7 +80,7 @@ module.exports = async (message, reply, son, callback) => {
 
 
     })
-    collector.on("end", c => m.edit({ components: [] }).catch(_ => _))
+    collector.on("end", () => m.edit({ components: [] }).catch(_ => _))
 
 
 

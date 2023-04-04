@@ -1,14 +1,12 @@
-const Discord = require('discord.js');
-
 /**
  * 
- * @param {Discord.Client} client 
- * @param {Discord.Message} message 
+ * @param {import("discord.js").Client} client 
+ * @param {import("discord.js").Message} message 
  * @param {*} args 
  * @returns 
  */
 exports.run = async (client, message, args) => {
-    if (!message.member.isOwner()) return message.reply(`Bu komutu sadece Bot Sahibi kullanabilir!`);
+    if (!message.member.isOwner()) return message.reply(`Bu komutu sadece bot sahibi kullanabilir!`);
     if (!args[0]) return message.reply("Presence ayarlamak için bir argüman belirtmelisiniz!");
 
     client.user.setActivity(args.join(" "))

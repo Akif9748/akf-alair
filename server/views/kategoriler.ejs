@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<%- include("extra/head", {title: "kategoriler"}) %>
+
+<body>
+  <%- include("extra/navbar") %>
+
+
+  <div class="container-sm">
+    <div class="d-grid gap-2 alair-cl mx-auto">
+      <h2><%= alair.user.username %> komut kategorileri</h2>
+      <hr>
+
+      <% for (const tür in türler) { %>
+        <% if (tür === "sahip") continue; %>
+        <a class="btn btn-komut text-white" href="/komutlar/<%= tür  %>"><%= türler[tür].emoji  %> <%= türler[tür].aciklama  %></a>
+      <% } %> 
+      <hr>
+      <p>Daha fazla yardım için:</p>
+      <a class="btn btn-secondary" href="/sunucu">Discord Sunucumuz</a>
+
+
+    </div>
+  </div>
+  <%- include("extra/footer") %>
+
+</body>
+
+</html>

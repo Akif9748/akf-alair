@@ -1,12 +1,12 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, MessageActionRow, MessageButton, CommandInteraction, Client } = require("discord.js")
+const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js")
 const { ButtonRole } = require("../util/models/")
 
 
 
 /**
- * @param {Client} client
- * @param {CommandInteraction} interaction 
+ * @param {import("discord.js").Client} client
+ * @param {import("discord.js").CommandInteraction} interaction 
  */
 
 exports.run = async (client, interaction) => {
@@ -15,13 +15,13 @@ exports.run = async (client, interaction) => {
     if (interaction.channel.type === "DM") return interaction.reply("Sadece sunucular içindir.")
     if (!interaction.member.perm("MANAGE_ROLES")) return interaction.reply({ content: "Yetkin yok.", ephemeral: true })
 
-    if (!interaction.guild.me.perm("MANAGE_ROLES")) return interaction.reply({ content: "Buna yetkim yok.", ephemeral: true })
+    if (!interaction.guild.members.me.perm("MANAGE_ROLES")) return interaction.reply({ content: "Buna yetkim yok.", ephemeral: true })
 
 
     const rol = interaction.options.getRole('rol');
     const kanal = interaction.options.getChannel('kanal') || interaction.channel;
     if (rol.name === "@everyone") return interaction.reply({ ephemeral: true, content: "Everyone rolünu kimseden alamam." })
-    if (interaction.guild.me.roles.highest.position <= rol.position) return interaction.reply({ ephemeral: true, content: "Bu rol benim rolumden üstün, bu yüzden rol veremem." })
+    if (interaction.guild.members.me.roles.highest.position <= rol.position) return interaction.reply({ ephemeral: true, content: "Bu rol benim rolumden üstün, bu yüzden rol veremem." })
 
     const açıklama = interaction.options.getString('açıklama') || `${rol.name} rolünu almak için butona basın`;
 

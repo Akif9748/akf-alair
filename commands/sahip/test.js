@@ -1,7 +1,11 @@
+/* eslint-disable no-unused-vars */
 const Discord = require("discord.js");
+const fs = require("fs");
 let Models = require("../../util/models");
 let { User, Guild } = require("../../util/");
 const cp = require("child_process").execSync;
+
+
 exports.run = async (client, message, args, _guild) => {
   if (!message.member.isOwner()) return;
   let user = id => client.users.cache.get(id);

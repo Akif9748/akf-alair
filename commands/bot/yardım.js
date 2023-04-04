@@ -4,8 +4,8 @@ const { türler } = require("../../util");
 
 /**
  * 
- * @param {Discord.Client} client 
- * @param {Discord.Message} message 
+ * @param {import("discord.js").Client} client 
+ * @param {import("discord.js").Message} message 
  * @param {*} args 
  * @param {*} param3 
  * @returns 
@@ -14,9 +14,6 @@ exports.run = async (client, message, args, { prefix }) => {
     const bilgi = `Bir komut hakkında daha fazla almak için \`${prefix}yardım komutadı\` yazın.`, ornek = `Örneğin \`${prefix}yardım çeviri\` gibi.`,
         footer = { iconURL: message.member.displayAvatarURL(), text: `${message.author.tag} tarafından istendi` }
 
-    const DAV_BUTON = new Discord.MessageButton().setLabel('Bot Davet').setStyle('LINK').setURL(client.davet)
-    const SW_BUTON = new Discord.MessageButton().setLabel('Destek Sunucusu').setStyle('LINK').setURL( client.sunucu )
-    const DAVET = new Discord.MessageActionRow().addComponents(DAV_BUTON, SW_BUTON)
 
     if (!args[0]) {
 
@@ -61,7 +58,7 @@ exports.run = async (client, message, args, { prefix }) => {
             .setTimestamp().addField(bilgi, ornek)
 
 
-        const m = await message.reply({ embeds: [embedler.anasayfa], components: [DAVET, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
+        const m = await message.reply({ embeds: [embedler.anasayfa], components: [client.BUTONLAR, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
         const collector = m.createMessageComponentCollector({ idle: 5 * 60_000 });
 
         collector.on('collect', async interaction => {
@@ -76,14 +73,12 @@ exports.run = async (client, message, args, { prefix }) => {
                 else
                     return interaction.editReply({ embeds: [embedler[interaction.values[0]]] })
 
-            } catch (e) {
-                console.log(e)
-            }
+            } catch { }
 
         });
 
 
-        collector.on("end", c => m.edit({ components: [DAVET] }).catch(_=>_))
+        collector.on("end", () => m.edit({ components: [client.BUTONLAR] }).catch(_ => _))
 
 
     } else {

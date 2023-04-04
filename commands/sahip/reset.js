@@ -2,8 +2,8 @@ const Discord = require('discord.js');
 
 /**
  * 
- * @param {Discord.Client} client 
- * @param {Discord.Message} message 
+ * @param {import("discord.js").Client} client 
+ * @param {import("discord.js").Message} message 
  * @param {*} args 
  * @returns 
  */

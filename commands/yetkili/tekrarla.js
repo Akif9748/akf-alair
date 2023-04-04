@@ -1,12 +1,12 @@
-const { hata } = require("../../util");
+
 
 exports.run = (client, message, args, { prefix }) => {
     if (!message.member.isAdmin())
         return message.reply('Üzgünüm, buna yetkin yok :grinning:')
 
-    if (!args[0]) return message.reply(hata(this, prefix) + "Tekrarlanacak şeyi yaz!")
+    if (!args[0]) return message.hata("Tekrarlanacak şeyi yaz!")
 
-    let textChannel = message.mentions.channels.first();
+    const textChannel = message.mentions.channels.first();
 
     message.delete().catch(_ => _)
 

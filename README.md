@@ -1,9 +1,9 @@
-# ALAIR-MINOR
-Küçültülmüş / Altyapı versiyon.
+# Alair
+Minimalize / Altyapı versiyon.
+
 ## KURULUM TALIMATLARI:
-- `util/config.json` dosyasını ayarlayın.
+- `util/json/config.json` & `util/json/config_beta.json` dosyasını ayarlayın. Beta yazan botunuzu windowsda çalıştırırken kullanılacaktır. Diğeri de linuxda. Davranışı değiştirmek için `util/config.js` dosyasını konfigure edin.
 - `index.js` içinde mongoose için bir veritabanı ayarlayın.
-- `util/wh` içine ASB ve kontrolcu için bir webhook ayarlayın.
 - `util/index.js` kategorileri komut kategorileri ekleyip sildiğinizde işe yarar. Yardım komutu için.
 - Konsola `npm i` yazın.
 - Sonra `node .` yazınca çalışmalıdır.
@@ -14,30 +14,10 @@ https://akif9748.me/alair
 ## Komut yardım açıklamaları:
 ```
 prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
+
 Örnek:
 !ban <@kullanıcı> [sebep]
 ```
-
-## Özellik bildirimleri:
-Tamamen özelleştirilebilir. Alair baz sistemden getirilen bazı özellikler:
-- **Alair-Client**, **Alair-Embed** aktarıldı. 
-- `ana / alt katmanlar` `app.js` Komut, interaction ve event yükleyicileri.
-- `index.js` **ASB - Kontrolcü**: Botun çökme vs. tüm hata, bilgilendirmelerini size gösterir.
-- **Blokerler**: (küfür, reklam, caps) engeller.
-- **butonrol**: Butonlarla rol verir.
-- **custom**: Özel komutlar eklersiniz.
-- **oto_cevap 1. katman**: Basit oto cevap sistemi (aç kapa var)
-- **oto_cevap 2. katman**: Bu ise botun `sor` komutu için. (minor)
-- **Sunucuya katılınca atılan mesaj.** Minor. Merkez sunucuya gelene verilen rol yok.
-- **Rank** sistemi. Tüm özellikleriyle. Sunucudakilerin rankını sıralama da dahil.
-- **Ekonomi** (minor) sistem. Para, arduino al sat, bahis, gönder, günlük ve sıralaması var.
-- **Komuta göre otomatik renderleyen yardım komutu**
-- **Bot-Bilgi**
-- **Çeşitli** komutlardan 2 tane bizim modüllerimizle yapılan komut, `ara` ve `tdk`.
-- **Karaliste** sistemi: Kanalda komut kullanımı kapatmak.
-- **Black** sistemi: Sahip komutu, botu bazı kişilere karşı kapatmak.
-- **Reset ve eval**.
-- **prefix** değiştirme.
 
 ## Sistem yapılandırması:
 
@@ -59,6 +39,7 @@ ayrıca util/ altındaki bazı dosyalar da bu katmana dahil, mesela kullanıcıy
 - **Kontrolcü**, yüzeysel bilgiler verir. Kapanmalar, resetler, ve kritik ana sistem hataları.
 
 ## Sürüm notları (Major):
+- V8.X.X Webpanel!
 - V7.X.X MemberModel iptali!
 - V6.X.X AlairClient yazıldı, Embedler AlairEmbed yapıldı.
 - V5.X.X komut => interaction aktarımı

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+<%- include("extra/head", {title: kategori+" komutları"}) %>
+
+<body>
+  <%- include("extra/navbar") %>
+  <div class="container-sm alair-trans">
+    <h2><%= alair.user.username %> <%=kategori%> komutları</h2>
+    <hr>
+    Komut arayıcı: <input type="text" id="ara" placeholder="Komutu yazınız...">
+
+    <table id="tablo" class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Komut</th>
+          <th scope="col">Açıklama</th>
+          <% if (kategori!=="interaction"){ %><th scope="col">Kullanım</th><% }; %>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (kategori==="interaction"){   for (const [key, value] of alair.interactions) {%>
+        <tr>
+          <td><%= key %></td>
+          <td><%= value.data.type === 1 ? value.data.description : `${value.data.type === 3 ? "Mesaj" : "Kullanıcı"} tipi interaction` %></td>
+        </tr>
+        <%}} else {  for (const [key, komut] of alair.commands .filter(komut=> typeof komut !== "string" && komut.tur === kategori && !komut.help.gizli)) { %>
+        <tr>
+          <td><%= key %></td>
+          <td><%= komut.help.description %></td>
+          <td><%= komut.help.usage %></td>
+        </tr>
+        <% } } %>
+      </tbody>
+    </table>
+    <script>
+      const trs = document.getElementsByTagName("tr");
+      document.getElementById("ara").onkeyup = e => {
+        for (const tr of trs)
+          tr.style.display = tr.innerText.toLowerCase().includes(e.target.value.toLowerCase()) ? "" : "none";
+      }
+    </script>
+
+    <p>Daha fazla yardım için:</p>
+    <a class="btn btn-secondary" href="/sunucu">Discord Sunucumuz</a>
+
+
+  </div>
+  <%- include("extra/footer") %>
+
+</body>
+
+</html>

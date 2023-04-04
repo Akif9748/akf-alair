@@ -1,14 +1,18 @@
 const { UserModel, GuildModel } = require("./models");
+const { getCache, feedCache } = GuildModel.schema;
+const config = require("./config");
 
 /**
  * Alair ana classes dosyası / Ara katman
  */
 module.exports = {
-    Alair: require("./alair.js"),  // Alair-Core
-
+    ...require("./alair.js"),  // Alair-Core, Alair-Embed
+    config, // config.json
     /* Metodlar */
     User: async (_id, select = "") => await UserModel.findById(_id, select) || await UserModel.create({ _id }),
-    Guild: async (_id, select = "") => await GuildModel.findById(_id, select) || await GuildModel.create({ _id }),
+    Guild: async _id =>
+        getCache(_id) ||
+        await GuildModel.findById(_id).then(feedCache) || await GuildModel.create({ _id }),
     delay: require("node:timers/promises").setTimeout,
     parsems(sure) {
         // taken from parse-ms
@@ -22,19 +26,18 @@ module.exports = {
     },
     random: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
     parsenum: num => String(num).replace(/\B(?=(\d{3})+(?!\d))/g, "."),
-    hata: (dosya, prefix) => `Doğru kullanım:\n\`\`\`${prefix + dosya.help.usage}\`\`\`\n`,
 
     /**
      * Değişkenler
      */
 
-    emoji: require("./config.json").emoji,
+    emoji: config.emoji,
 
     /**
      * Bot komutları için olan türlerin açıklaması:
     */
     türler: {
-        other: { ad: "Genel", emoji: '🏳', aciklama: 'Genel Kategorisi' },
+        other: { ad: "Genel", emoji: '🏳', aciklama: 'Genel komutlar' },
         bot: { ad: "Bot", emoji: '🤖', aciklama: 'Bot ile ilgili komutlar' },
         eglence: { ad: "Eğlence", emoji: '🕹', aciklama: 'Eğlence komutları' },
         ekonomi: { ad: "Ekonomi", emoji: '💵', aciklama: 'Ekonomi komutları' },

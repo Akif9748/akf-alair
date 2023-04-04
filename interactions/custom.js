@@ -1,10 +1,11 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require("discord.js");
 const { Custom } = require("../util/models");
+const liste = require("../util/functions/listeleyici");
 /**
  * 
- * @param {Discord.Client} client 
- * @param {Discord.CommandInteraction} interaction 
+ * @param {import("discord.js").Client} client 
+ * @param {import("discord.js").CommandInteraction} interaction 
  * @returns 
  */
 exports.run = async (client, interaction) => {
@@ -12,8 +13,8 @@ exports.run = async (client, interaction) => {
     if (!interaction.member.perm("MANAGE_MESSAGES")) return interaction.reply("Bunun için mesajları yönetme yetkin olmalı.")
 
     const subcommand = interaction.options.getSubcommand(true);
-    const embed = new Discord.MessageEmbed()
-        .setName("Custom anahtar")
+    const embed = new Discord.MessageEmbed().setName("Custom anahtar")
+
     if (subcommand === "göster") {
 
         const sonuclar = await Custom.find({ guildId })
@@ -24,9 +25,7 @@ exports.run = async (client, interaction) => {
         )
 
         return interaction.reply({
-            embeds: [
-                embed.setDescription(sonuclar.map(sonuc => `• **${sonuc.key}** => ${sonuc.value} (Ekleyen: <@${sonuc.authorid}>)`).join("\n"))
-            ]
+            embeds: liste(sonuclar, embed, sonuc => `• **${sonuc.key}** => ${sonuc.value} (<@${sonuc.authorid}>)`)
         })
 
     } else if (subcommand === "sil") {
@@ -44,7 +43,7 @@ exports.run = async (client, interaction) => {
         const yaz = await Custom.exists({ guildId, key })
         if (yaz) return interaction.reply("Zaten böyle bir anahtar var ve dolu.")
         const value = interaction.options.getString('değer');
-
+        if (key.length > 2000 || value.length > 2000) return interaction.reply("Değerler 2000 karakterden fazla olamaz.")
         await Custom.create({ guildId, authorid: user.id, key, value })
 
         return interaction.reply("Anahtar eklendi!");

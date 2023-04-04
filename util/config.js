@@ -1,0 +1,1 @@
+module.exports = require(`./json/${process.platform === "linux" ? "config.json" : "config_beta.json"}`)

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<%- include("extra/head", {title: "Teşekkürler"}) %>
+
+<body>
+  <%- include("extra/navbar") %>
+
+  <div class="container-sm alair-trans center" >
+    <% tesekkur.forEach(e => { %>
+      <p><a href="https://discord.com/users/<%= e.id %>"><strong><%= e.name %></strong></a> <%= e.text %></p>
+    <% }) %>
+    <p><strong>thesportstacker</strong>, korona komutu ve komutların ilk handleri.
+      <strong>Daha buraya adı yazılmayı hak eden kaç kişi var sayamayız...</strong>
+    </p>
+  </div>
+
+  <%- include("extra/footer") %>
+
+</body>
+</html>

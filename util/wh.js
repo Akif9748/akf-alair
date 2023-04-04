@@ -1,6 +1,5 @@
 const { WebhookClient } = require('discord.js');
+const { webhooklar: whs } = require("./config");
 
-module.exports = {
-    kontrolcu: new WebhookClient({ url: ' ' }),
-    asb: new WebhookClient({ url: ' ' }),
-}
+for (const wh in whs)
+    module.exports[wh] = new WebhookClient({ url: whs[wh] });

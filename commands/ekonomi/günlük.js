@@ -5,7 +5,7 @@ exports.run = async (client, message, args) => {
 
     const user = await User(message.author.id, "times.gunluk para"),
         sure = 86400000,
-        miktar = random(2000,4500),
+        miktar = random(2000, 4500),
         asr = Date.now();
 
     if (user.times?.gunluk && sure - (asr - user.times.gunluk) > 0)

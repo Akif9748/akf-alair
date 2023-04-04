@@ -1,18 +1,18 @@
 const Discord = require("discord.js");
 const gis = require('async-g-i-s');
 const { MessageEmbed } = Discord;
-const { hata } = require("../../util")
+
 const sayfa = require("../../util/functions/sayfa");
 /**
  * 
- * @param {Discord.Client} client 
- * @param {Discord.Message} message 
+ * @param {import("discord.js").Client} client 
+ * @param {import("discord.js").Message} message 
  * @param {Array} args 
  * @returns 
  */
 exports.run = async (client, message, args, { prefix }) => {
 
-    if (!args[0]) return message.reply(hata(this, prefix))
+    if (!args[0]) return message.hata()
 
     const aramaterimi = args.join(" ")
 

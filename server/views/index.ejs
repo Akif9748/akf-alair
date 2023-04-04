@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<%- include("extra/head") %>
+
+<body>
+  <%- include("extra/navbar") %>
+
+
+  <div class="container-sm">
+    <div class="d-grid gap-2 alair-cl mx-auto">
+      <h2><%= alair.user.username %></h2>
+      <p>Alair, 2021 yılının ocak ayından beri geliştirilen çok işlevli bir bottur. Alair projesi bu yola tüm işleri tek çatı (bot) altından halletmek için çıkmıştı, ve hala çizgisini gerek moderasyon, gerek sunucu yönetimi anlamında sağlıyor.      </p>
+
+      <a class="btn btn-komut text-white" href="/komutlar">Komutlar</a>
+      <hr>
+      <a class="btn btn-secondary text-white" href="/davet">Davet et</a>
+      <a class="btn btn-secondary" href="/sunucu">Destek sunucusu</a>
+    </div>
+  </div>
+
+  <%- include("extra/footer") %>
+
+  
+</body>
+
+</html>

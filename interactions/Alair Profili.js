@@ -6,8 +6,8 @@ const { ContextMenuCommandBuilder } = require('@discordjs/builders');
 
 /**
  * 
- * @param {Discord.Client} client 
- * @param {Discord.ContextMenuInteraction} interaction 
+ * @param {import("discord.js").Client} client 
+ * @param {import("discord.js").ContextMenuInteraction} interaction 
  * @returns 
  */
 exports.run = async (client, interaction) => {

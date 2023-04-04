@@ -1,11 +1,11 @@
-const { User, emoji, hata } = require("../../util");
+const { User, emoji } = require("../../util");
 exports.run = async (client, message, args, { prefix }) => {
-
+    const ogret = () => message.hata();
     if (!args[1]) return ogret();
 
     const şanslı = message.üye();
     if (!şanslı) return ogret();
-    const para = Number(args[1])
+    const para = parseInt(args[1])
     if (!para || para < 0) return ogret()
 
     const kul = await User(message.author.id, "para")
@@ -19,9 +19,6 @@ exports.run = async (client, message, args, { prefix }) => {
     await user2.save()
     return message.reply(`${şanslı}, ${message.author} sana **${para} ATC** <:atacoin:${emoji.ata}> gönderdi`)
 
-    function ogret() {
-        return message.reply(hata(this, prefix));
-    }
 };
 
 exports.help = {

@@ -5,12 +5,25 @@
         "es2021": true
     },
     "extends": "eslint:recommended",
-    "overrides": [],
+    "ignorePatterns": [
+        "*.min.js"
+    ],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
-        "no-unused-vars": "off",
-        "no-empty": "off"
-    }
+        "no-empty": "off",
+        "no-unused-vars": "warn",
+        "no-use-before-define": "error"
+    },
+    "overrides": [
+        {
+            "env": {
+                "browser": true
+            },
+            "files": [
+                "server/public/*"
+            ]
+        }
+    ]
 }

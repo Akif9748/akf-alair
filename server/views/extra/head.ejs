@@ -1,0 +1,12 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= alair.user.username + (title ?" | "+ title:"")  %></title>
+  <meta name="description" content="Alair web sitesi">
+  <meta name="theme-color" content="<%= alair.ayarlar.renk %>">
+  <link href="/bootstrap-night.min.css" rel="stylesheet">
+  <script src="/bootstrap.min.js"></script>
+  <link href="/style.css" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= alair.user.displayAvatarURL({size:32}) %>">
+  <link rel="icon" href="<%= alair.user.displayAvatarURL({size:32}) %>" type="image/x-icon">
+</head>

@@ -1,10 +1,9 @@
-
 const { User } = require("../../util");
 
-exports.run = async (client, message, args, guild) => {
+exports.run = async (client, message, args) => {
 
-    if (!message.member.isOwner())
-        return message.reply('Üzgünüm, bu komut ancak sahiplere özeldir.')
+    if (!message.member.isOwner()) return;
+    
     let kisi = message.mentions.users.first() || client.users.cache.get(args[0]);
     try {
         if (args[0] || !kisi)
@@ -12,16 +11,14 @@ exports.run = async (client, message, args, guild) => {
 
     } catch { }
 
-    if (!kisi) return message.reply("Salağı etiketlemeyi unuttun!")
+    if (!kisi) return message.reply("**[ASB]:** Salağı etiketlemeyi unuttun!")
 
     const kul = await User(kisi.id, "blacklist");
     kul.blacklist = !kul.blacklist;
     await kul.save()
-    await client.userBlock()
-    await message.reply("Kişinin blacklist'i " + (kul.blacklist ? "**açıldı**" : "**kapatıldı**"))
-
-
-
+    await client.updateBlacklist()
+    await message.reply("**[ASB]:** Kişinin blacklist'i " + (kul.blacklist ? "**açıldı**" : "**kapatıldı**"));
+    
 };
 
 exports.help = {

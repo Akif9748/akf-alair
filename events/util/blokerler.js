@@ -1,4 +1,5 @@
-const kufur = require("../../util/kufur.json")
+/* eslint-disable no-use-before-define */
+const kufur = require("../../util/json/kufur.json")
 const { delay } = require("../../util")
 
 exports.kufur = async message => {
@@ -20,3 +21,5 @@ async function kes(message, tip) {
     } catch { return true; }
 
 }
+
+exports.kes = kes;

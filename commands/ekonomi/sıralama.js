@@ -10,12 +10,13 @@ exports.run = async (client, message, args) => {
     const seviye = seviye => seviye ? "Seviye: **" + seviye + "**" : "";
 
     const path = `guilds.${message.guildId}`,
-        query = {},
-        sort = {}
-
-    query[path] = { $exists: true };
-    sort[path + ".seviye"] = -1;
-    sort[path + ".xp"] = -1;
+        query = {
+            [path]: { $exists: true }
+        },
+        sort = {
+            [path + ".seviye"]: -1,
+            [path + ".xp"]: -1
+        }
 
     const veri = await UserModel.find(query).select(path).sort(sort).limit(30);
     const gonder = veri.map((rank, index) =>

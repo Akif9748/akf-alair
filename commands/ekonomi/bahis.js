@@ -1,17 +1,18 @@
-const { User, hata } = require("../../util");
+const { User } = require("../../util");
 
 exports.run = async (client, message, args, { prefix }) => {
-    if (!Number(args[0]) || Number(args[0]) <= 0) return message.reply(hata(this, prefix)+"Miktarı girmeyi unuttunuz.")
+    const bahis = parseInt(args[0]);
 
-    const bahis = Number(args[0]);
+    if (!bahis|| parseInt(args[0]) <= 0) return message.hata("Miktarı girmeyi unuttunuz.")
+
     const kul = await User(message.author.id, "para");
     if (kul.para < bahis) return message.reply("Paran buna yetmiyor :)")
 
     if (Math.random() < 0.5) {
-        kul.para += bahis
+        kul.para += bahis;
         await message.reply("Kazandın. Paranı verdim.")
     } else {
-        kul.para -= bahis
+        kul.para -= bahis;
         await message.reply("Kaybettin. Paranı aldım.")
     }
     await kul.save()

@@ -11,7 +11,7 @@ const userSema = new mongoose.Schema({
         arduino: Date,
         gunluk: Date
     },
-    // arrays:
+    // rank:
     guilds: { type: Object, default: {} }
 
 }, { versionKey: false });

@@ -6,7 +6,6 @@
     ],
     "sunucu": "https://discord.gg/9cBnKmjzvH",
     "prefix": "!",
-    "tokenBeta": " ",
     "token": " ",
     "renk": "#736FE9",
     "bildiri": "841639719724515338",
@@ -15,5 +14,9 @@
     "emoji": {
         "arduino": "945380301474004993",
         "ata": "946447644341981184"
+    },
+    "webhooklar": {
+        "kontrolcu": " ",
+        "asb": " "
     }
 }

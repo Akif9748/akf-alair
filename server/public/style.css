@@ -1,0 +1,51 @@
+:root {
+    --alair: #736FE9;
+}
+
+footer {
+    background-color: #000000;
+    font-size: small;
+}
+
+.btn-secondary {
+    color: #fafafa;
+    background-color: var(--alair);
+    border-color: var(--alair);
+}
+
+.btn-komut {
+    color: #fafafa;
+    background-color: #626262;
+    border-color: #626262;
+}
+
+body {
+    min-height: 400px;
+    background: url("/alairbg2.jpg") no-repeat center center fixed;
+    background-size: cover;
+    clear: both;
+}
+
+a {
+    color: var(--alair);
+}
+
+.alair-trans {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.alair-cl {
+    width: 50%;
+}
+
+@media screen and (max-width: 768px) {
+    .alair-cl {
+        width: 90%;
+    }
+}
+
+.container-sm {
+    margin-top: 25px;
+    margin-bottom: 125px;
+}

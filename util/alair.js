@@ -5,7 +5,7 @@
  */
 const Discord = require("discord.js");
 const { UserModel } = require("./models");
-const { emoji, token, renk, sahip, tokenBeta, sunucu } = require("./config.json");
+const { emoji, token, renk, sahip, sunucu } = require("./config");
 const ayarlar = { renk, sahip, start: Date.now(), emoji, kullanim: { komut: 0, interaction: 0 } };
 
 /* alair-prototype-system */
@@ -22,6 +22,10 @@ Discord.GuildMember.prototype.isAdmin = function () {
     return this.perm("ADMINISTRATOR");
 }
 
+Discord.Message.prototype.hata = function (ek = "") {
+    return this.reply(`Doğru kullanım:\n\`\`\`${this.guildData.prefix + this.komut.help.usage}\`\`\`\n${ek}`);
+}
+
 Discord.Message.prototype.üye = function () {
     const args = this.content.split(/ +/g).filter(Boolean).slice(1);
 
@@ -31,6 +35,7 @@ Discord.Message.prototype.üye = function () {
         this.member;
 
 }
+
 
 /* nodejs-prototype */
 
@@ -51,10 +56,10 @@ String.prototype.toEN = function () {
 
 
 let iconURL, name;
-module.exports = class Alair extends Discord.Client {
+class Alair extends Discord.Client {
     constructor(opts) {
         super(opts);
-        this.token = process.platform === "linux" ? token : tokenBeta;
+        this.token = token;
         this.ayarlar = ayarlar;
         this.version = require("../package.json").version;
         this.blacklist = []
@@ -63,22 +68,23 @@ module.exports = class Alair extends Discord.Client {
         this.commands = new Discord.Collection();
         this.interactions = new Discord.Collection();
 
-        this.login().then(_ => {
+        this.login().then(() => {
             this.davet = `https://discord.com/api/oauth2/authorize?client_id=${this.user.id}&permissions=8&scope=bot%20applications.commands`
             iconURL = this.user.displayAvatarURL();
             name = this.user.username;
+
+            // butonlar için
+            this.BUTONLAR = new Discord.MessageActionRow().addComponents(
+                new Discord.MessageButton().setLabel('Bot Davet').setStyle('LINK').setURL(this.davet),
+                new Discord.MessageButton().setLabel('Destek Sunucusu').setStyle('LINK').setURL(this.sunucu)
+            );
+
         });
 
     }
-    async userBlock(_id) {
-        if (_id) {
-            const kisi = await UserModel.findById(_id, "blacklist");
-            kisi.blacklist = true;
-            await kisi.save();
-        }
+    async updateBlacklist() {
         const kisiler = await UserModel.find({ blacklist: true }, "_id");
-        this.blacklist = kisiler.map(kisi => kisi._id);
-        return this.blacklist;
+        return this.blacklist = kisiler.map(kisi => kisi._id);
     }
 
 
@@ -87,10 +93,10 @@ module.exports = class Alair extends Discord.Client {
 /* alair-embed */
 
 class MessageEmbed extends Discord.MessageEmbed {
-    constructor(notAuth = false) {
-        super();
+    constructor(notAuth) {
+        typeof notAuth === "object" ? super(notAuth) : super();
         this.setColor(renk);
-        if (!notAuth)
+        if (!notAuth && name)
             this.setAuthor({ iconURL, name });
     }
 
@@ -101,3 +107,4 @@ class MessageEmbed extends Discord.MessageEmbed {
 
 }
 Discord.MessageEmbed = MessageEmbed;
+module.exports = { Alair, MessageEmbed };

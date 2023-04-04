@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
 const emojiler = ["0️⃣", '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
-const { delay, hata } = require("../../util")
+const { delay } = require("../../util")
 
 exports.run = async (client, message, args, { prefix }) => {
 
-  const sayı = Number(args[0]), anket = args.slice(1).join(" ")
+  const sayı = parseInt(args[0]), anket = args.slice(1).join(" ")
 
   if (!sayı || !anket)
-    return message.reply(`${hata(this, prefix)}Şık sayısını veya anketi unuttun! Unutma, en az 1, en fazla 9 şık seçeneğin var.`);
+    return message.hata(`Şık sayısını veya anketi unuttun! Unutma, en az 1, en fazla 9 şık seçeneğin var.`);
 
   const embed = new Discord.MessageEmbed()
     .setTitle(message.author.tag + ' başlattığı oylama:')
