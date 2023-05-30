@@ -1,44 +1,55 @@
 # Alair
-Minimalize / Altyapı versiyon.
+akf-alair-v13, baz system.
 
 ## KURULUM TALIMATLARI:
-- `util/json/config.json` & `util/json/config_beta.json` dosyasını ayarlayın. Beta yazan botunuzu windowsda çalıştırırken kullanılacaktır. Diğeri de linuxda. Davranışı değiştirmek için `util/config.js` dosyasını konfigure edin.
-- `index.js` içinde mongoose için bir veritabanı ayarlayın.
+- `util/json/config.json` & `util/json/config_beta.json` dosyalarını ayarlayın. Ana config bot linuxda çalışırken çalışacaktır, beta config ise diğer işletim sistemlerinde. Davranışı değiştirmek için `util/config.js` dosyasını konfigure edin. Kontrolcü davranışı üzerinde değişiklik yapmak için `index.js`'yi değiştirin.
 - `util/index.js` kategorileri komut kategorileri ekleyip sildiğinizde işe yarar. Yardım komutu için.
 - Konsola `npm i` yazın.
-- Sonra `node .` yazınca çalışmalıdır.
+- `node deploy` yazarak komutları deploy edebilirsiniz.
+- Sonra `npm start` (production) / `npm test` (development) yazınca çalışmalıdır.
 
 ## Kanlı canlı versiyonunu eklemek için:
-https://akif9748.me/alair
+https://akif9748.github.io/alair
 
 ## Komut yardım açıklamaları:
 ```
 prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
 
 Örnek:
-!ban <@kullanıcı> [sebep]
+!ban <@kullanıcı | id> [sebep]
 ```
 
 ## Sistem yapılandırması:
 
-1. **Ana/alt katman** => `index.js` / `app.js` / `package.json` => En hızlı ve hayati önem taşıyan katman. Kontrolcü + bot.
-Kontrolcü es geçilerek çalıştırılabilir! *Client dosyadan doğrudan asla çıkamaz.*
+1. **Ana/alt katman:** `index.js` / `app.js` => En hızlı ve hayati önem taşıyan katman. Kontrolcü + bot. Kontrolcü es geçilerek çalıştırılabilir! 
+*Client dosyadan doğrudan asla çıkamaz.*
 
-2. **Alt katmanlar** => `events/` => içindeki eventler, /util dahil değil... *Direkt client eventlerine bağlı.*
+2. **Alt katmanlar:** `events/` => events içindeki `.js` dosyaları.
+*Direkt client eventlerine bağlı.*
+    - **Alt/Webserver katmanı:** `server/` => events içi `ready` eventi ile devreye girer.
 
-3. **Üst katmanlar** => `komutlar/` & `interactions/` & `buttons/` => kullanıcıyla direkt iletişim halinde olan katmanlar, 
-ayrıca util/ altındaki bazı dosyalar da bu katmana dahil, mesela kullanıcıyla doğrudan erişime geçen zekanın dosyası. *En çok hatanın meydana geldiği mekan*
+3. **Orta (alt-üst) katman:** `events/util/` => altındaki kalan dosyalar, kelime oyunu gibi, alt-üst katman kombinasyonunu içeren dosyalar. 
+*Üst katmanlara göre daha sıkı yönetilen, ama en az 1 alt katman üzerinden erişilen yerler.*
 
-4. **Orta katmanlar** => `events/util/` => altındaki kalan dosyalar, kelime oyunu gibi, alt-üst katman kombinasyonunu içeren dosyalar. *Üst katmanlara göre daha sıkı yönetilen, ama en az 1 alt katman üzerinden erişilen yerler.*
+4. **Üst katmanlar:**  `commands/` & `interactions/` & `buttons/` => kullanıcıyla direkt iletişim halinde olan katmanlar. 
+*En çok hatanın meydana göz ardı edildiği yer*
 
-5. **Çeşitli/Ara katmanlar** => `util/` => klasör içindeki tüm destek yapıları. Bunlar `alt/üst/ana` katmanların hepsiyle bağlantılıdır. *Tüm katmanlara destek veren, modeller, classes, ve fonksionlar, ayrıca **CONSTANTLAR**, config yapıları vs.*
+5. **Destek katmanı:**  `util/` => klasör içindeki tüm destek yapıları. Bunlar tüm katmanlar ile bağlantılıdır. 
+*Tüm katmanlara destek veren, **Alair-Core**, **ASB**, modeller, fonksionlar, resimler, sabitler, config/json yapıları vs.*
 
 ## Güvenlik:
-2 katmanlık güvenlik sistemi var! 2 parça webhookdan oluşur, **kontrolcu** (halka açık) ve **ASB** (Alair Savunma Bölümü).
-- *uncaughtException* (kritik-ana-sistem), *event listener hatası* (alt katmanlar), ve *messageCreate* (üst katman komut hataları) hatalarında **ASB** kullanılır, detaylı log verir.
-- **Kontrolcü**, yüzeysel bilgiler verir. Kapanmalar, resetler, ve kritik ana sistem hataları.
+2 katmanlık güvenlik sistemi var! 2 parça webhookdan oluşur.
+- **ASB:** Alair Savunma Birimi
+    - `uncaughtException` (kritik-ana-sistem), *event listener hatası* (alt katmanlar), 
+    - `messageCreate & interactionCreate` (üst katman komut hataları) 
+    
+    hatalarında **ASB** kullanılır, detaylı log verir. 
+    *Ayrıca ratelimit'ler, oturum sonu -telemetri-, **ASB** bünyesindedir.*
+
+- **Kontrolcü** (halka açık), yüzeysel bilgiler verir. Kapanmalar, resetler, ve kritik ana sistem hataları.
 
 ## Sürüm notları (Major):
+- V9.X.X Komut-interaction birleştirildi!
 - V8.X.X Webpanel!
 - V7.X.X MemberModel iptali!
 - V6.X.X AlairClient yazıldı, Embedler AlairEmbed yapıldı.
@@ -49,36 +60,37 @@ ayrıca util/ altındaki bazı dosyalar da bu katmana dahil, mesela kullanıcıy
 - V1.X.X handler yenilenmesi/help bilgisinin tekrar yazılması, tüm komutlara
 - V0.X.X Alair Bot-Bro olarak doğdu
 
-
 ## Ana/alt katman iç yapılandırması:
 - Sonuna kadar hız için ayarlı.
 - `index.js` kontrolcüsü var, bot çökerse hızlı yeniden başlatan bir yönetici. Webhookla bilgi veriyor kendi çökerse.
-- `app.js` asıl ana dosya. Veritabanına bağlantı, Client kurulumu, komutlar, eventler başlatımı burada olur.
-### **Daha fazla açıklama:**
-- Cliente komutlar, ve interactionları koyar. 
+- `app.js` asıl ana dosya. Veritabanına bağlantı, Client kurulumu, komutların işlenmesi (handler), eventler başlatımı burada olur.
 
-#### **Handlerler:**
-- Event handler doğrudan orada dosya adlarıyla bağlanır.
-- interaction handler dosyadaki SlashCommandBuilder verisinden alınan bilgilerle anahtarlanıp, run ile de keylenir.
-- command handler bir dosyayı nasıl kaydeder?
-#### KEY:
-komutadı
-#### VALUE:
-Eğer 1. allias ise komutun kendisi, eğer diğer allias ise 1. allias'ın keyi.
+### **Handlerler:**
+- **Event handler:** doğrudan alt katmandaki dosyaların adlarıyla bağlanır.
+- **interaction handler:** dosyadaki SlashCommandBuilder verisinden alınan bilgilerle anahtarlanıp, dosya ile keylenir.
+- **command/interaction handler:**
+    - KEY: komutadı
+    - VALUE: Eğer 1. dereceden ise komutun kendisi, eğer diğer derecelerden ise 1. derecenin adı.
+    - Eğer komut dosyasında interaction da varsa, onu da interactionlara kaydeder
+#### Dosya yapısı:
 ```js
 const dosya = { 
     help: { 
-        name: [ "ana isim", "allias1", ...alliasesler ],
+        native:true, // interaction destekliyor ise
+        name: ["ana isim/interaction ismi", "allias1", ...alliasesler ],
         description: 'Yardımda renderlenecek açıklama',
         usage: 'komut özel yardımdaki kullanım...',
-        gizli: true // renderlenmeyecek ve gizli çalışan
-                    // typingsiz komutlar için
-        
+        options: {}, // INTERACTION ICIN: options vs gibi alanlar, interaction içeren komut için.
+        gizli: true // renderlenmeyecek ve gizli çalışan, typingsiz komutlar için
     },
+
+    data: {}, // INTERACTION ICIN: helpden bağımsız ise, burası çözer
+    runInteraction(client, interaction) { }, // INTERACTION ICIN: eğer komutta interaction varsa, çalışması için
+    fonksiyon: () => { }, // INTERACTION ICIN: komutun fonksiyonu kendinden ayrı ise.
+
     tur: "other", // komut türü, klasör ismiyle aynı
-    run: (client, message, args, guild) => { /* return Message || void */ },
-    sayi:0
-    // sayi ise kaçıncı allias olduğunu gösterir.
-    // sadece 0. allias renderlenir. 
+    dosyaAdi: "dosya.js", // hangi dosya oldugu
+    run (client, message, args, guild) { return Message || void; },
+    derece: 0// derece ise kaçıncı allias olduğunu gösterir.sadece 0. allias renderlenir. 
 }
 ```
