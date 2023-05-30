@@ -2,7 +2,7 @@ const Discord = require("discord.js"); // Discord.js'yi tanımladık.
 const { MessageEmbed } = Discord;
 const { UserModel } = require("../../util/models/");
 const { parsenum } = require("../../util");
-exports.run = async (client, message, args) => {
+exports.run = async (client, message) => {
 
 
     const get = id => client.users.cache.get(id)?.tag || "~~" + id + "~~";
@@ -14,13 +14,13 @@ exports.run = async (client, message, args) => {
         `**${index + 1}.** ${get(rank._id)} • ATC: **${parsenum(rank.para)}**`
     )
 
-    const embeds = [       new MessageEmbed()
+    const embeds = [new MessageEmbed()
         .setName("ATC Sıralaması")
         .setTitle("» Alair Global")
         .setDescription(gonder.join("\n"))]
-        return message.reply({ embeds })
+    return message.reply({ embeds })
 
- 
+
 }
 
 

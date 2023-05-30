@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js")
-const { ButtonRole } = require("../util/models/")
+const { ButtonRole } = require("../../util/models/")
 
 
 
@@ -9,7 +9,7 @@ const { ButtonRole } = require("../util/models/")
  * @param {import("discord.js").CommandInteraction} interaction 
  */
 
-exports.run = async (client, interaction) => {
+exports.runInteraction = async (client, interaction) => {
 
 
     if (interaction.channel.type === "DM") return interaction.reply("Sadece sunucular içindir.")

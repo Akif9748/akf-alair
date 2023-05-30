@@ -23,7 +23,6 @@ module.exports = async message => {
 
     const guild = await Guild(guildId);
     let { prefix, kufur, caps, oto, blacklist, sayi, kelime } = guild;
-    message.guildData = guild;
 
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`)
         return await message.reply(`Buyrun, komutlarımı **${prefix}yardım** yazarak öğrenebilirsiniz.`);
@@ -59,7 +58,7 @@ module.exports = async message => {
             sonkomut[message.author.id] = Date.now();
 
             try {
-                message.komut = komut;
+                message.hata = (ek = "") => message.reply(`Doğru kullanım:\n\`\`\`${prefix + komut.help.usage}\`\`\`\n${ek}`).catch(_ => _);
                 await komut.run(client, message, args, guild);
             } catch (e) {
                 asb.komut(command, message, e);
@@ -69,10 +68,10 @@ module.exports = async message => {
             }
 
         }
-    } 
-    
+    }
+
     if (!message.content.startsWith(prefix)) {
-        if (message.content.length > 3) require("./util/rank")(message);
+        if (guild.rank && message.content.length > 3) require("./util/rank")(message);
 
         const sonuc = await Custom.findOne({ guildId, key });
         if (sonuc) return await message.reply(sonuc.value);

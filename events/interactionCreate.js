@@ -38,7 +38,12 @@ module.exports = async interaction => {
         if (!interaction.guild) return interaction.deferReply();
         const komut = client.interactions.get(interaction.commandName);
         try {
-            await komut.run(client, interaction);
+            interaction.author ||= interaction.user;
+            interaction.edit ||= interaction.editReply;
+            if (komut.data.native)
+                await komut.run(client, interaction, [], guild);
+            else
+                await komut.run(client, interaction, guild);
         } catch (e) {
             console.error("⚠ [Interaction içi alt katman hatası]\n", require('util').inspect(interaction, { depth: 0 }), "\nTam Hata:\n", e);
             if (!interaction.replied)

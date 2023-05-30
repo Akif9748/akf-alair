@@ -10,7 +10,9 @@ const sayfa = require("../../util/functions/sayfa");
  * @param {Array} args 
  * @returns 
  */
-exports.run = async (client, message, args, { prefix }) => {
+exports.run = async (client, message, args) => {
+    if (message.options)
+        args[0] = message.options.getString("sorgu");
 
     if (!args[0]) return message.hata()
 
@@ -19,14 +21,16 @@ exports.run = async (client, message, args, { prefix }) => {
 
     try {
 
-        const results = await gis(aramaterimi, { hl: "tr", safe: message.channel.nsfw ? "off" : "on" });
+        const results = await gis(aramaterimi, {
+            query: { hl: "tr", safe: message.channel.nsfw ? "off" : "on" }
+        });
         const embed = new MessageEmbed().setTitle("» Butonlara tıklayarak resmi değiştirebilirsiniz").setImage(results[0].url.replace(".gifv", ".gif"))
             .setFooter({ iconURL: message.member.displayAvatarURL(), text: message.member.displayName + " • Sayfa 1/" + results.length }).setName("Görsel Arama")
 
 
         sayfa(message, { embeds: [embed] }, results.length, (reply, sayfa) => {
             const embeds = [embed
-                .setFooter({ text: `Sayfa ${sayfa}/${results.length}` })
+                .setFooter({ iconURL: message.member.displayAvatarURL(), text: message.member.displayName + `• Sayfa ${sayfa}/${results.length}` })
                 .setImage(results[sayfa - 1].url.replace(".gifv", ".gif"))]
 
             return reply({ embeds });
@@ -41,7 +45,11 @@ exports.run = async (client, message, args, { prefix }) => {
 };
 
 exports.help = {
+    native: true,
     name: ['ara', 'bul'],
     description: 'Görsel arama',
-    usage: 'ara <sorgu>'
+    usage: 'ara <sorgu>',
+    options: [
+        { "type": 3, "name": "sorgu", "description": "Arayacağım şeyi gir!", "required": true }
+    ]
 };

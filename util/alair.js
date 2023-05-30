@@ -1,6 +1,7 @@
+/* eslint-disable no-use-before-define */
 /**
  * Alair-Core,
- * Client,
+ * Client, MessageEmbed,
  * prototype handler 
  */
 const Discord = require("discord.js");
@@ -9,6 +10,8 @@ const { emoji, token, renk, sahip, sunucu } = require("./config");
 const ayarlar = { renk, sahip, start: Date.now(), emoji, kullanim: { komut: 0, interaction: 0 } };
 
 /* alair-prototype-system */
+
+/* memberPrototype */
 
 Discord.GuildMember.prototype.isOwner = function () {
     return this.client.ayarlar.sahip.includes(this.id)
@@ -22,9 +25,6 @@ Discord.GuildMember.prototype.isAdmin = function () {
     return this.perm("ADMINISTRATOR");
 }
 
-Discord.Message.prototype.hata = function (ek = "") {
-    return this.reply(`Doğru kullanım:\n\`\`\`${this.guildData.prefix + this.komut.help.usage}\`\`\`\n${ek}`);
-}
 
 Discord.Message.prototype.üye = function () {
     const args = this.content.split(/ +/g).filter(Boolean).slice(1);
@@ -43,7 +43,7 @@ Array.prototype.random = function () {
     return this[Math.floor(Math.random() * this.length)]
 }
 
-// İngilizce karakter dönüşümü:
+
 String.prototype.toEN = function () {
     return this//UPPERS:     // LOWERS:
         .replaceAll("Ğ", "G").replaceAll("ğ", "g")
@@ -56,6 +56,9 @@ String.prototype.toEN = function () {
 
 
 let iconURL, name;
+
+/* alair-client */
+
 class Alair extends Discord.Client {
     constructor(opts) {
         super(opts);
@@ -67,7 +70,7 @@ class Alair extends Discord.Client {
         this.sunucu = sunucu;
         this.commands = new Discord.Collection();
         this.interactions = new Discord.Collection();
-
+            
         this.login().then(() => {
             this.davet = `https://discord.com/api/oauth2/authorize?client_id=${this.user.id}&permissions=8&scope=bot%20applications.commands`
             iconURL = this.user.displayAvatarURL();
@@ -83,11 +86,8 @@ class Alair extends Discord.Client {
 
     }
     async updateBlacklist() {
-        const kisiler = await UserModel.find({ blacklist: true }, "_id");
-        return this.blacklist = kisiler.map(kisi => kisi._id);
+        return this.blacklist = (await UserModel.find({ blacklist: true }, "_id")).map(kisi => kisi._id);
     }
-
-
 }
 
 /* alair-embed */
@@ -101,6 +101,7 @@ class MessageEmbed extends Discord.MessageEmbed {
     }
 
     setName(name) {
+        if (!this.author) return;
         this.author.name += " • " + name;
         return this;
     }

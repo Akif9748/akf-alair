@@ -22,7 +22,7 @@ module.exports = {
         kul.arduino -= sayi;
         kul.para += fiyat;
         await kul.save()
-        await message.reply(`**${sayi} Arduino** <:arduino:${emoji.arduino}> satarak **${fiyat} ATC** <:atacoin:${emoji.ata}> kazandın.`);
+        await message.reply(`**${sayi} Arduino** ${emoji.arduino} satarak **${fiyat} ATC** ${emoji.ata} kazandın.`);
         await message.react(emoji.arduino);
 
 

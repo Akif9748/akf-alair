@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const turkce = require("turkce");
 
 
-exports.run = async (client, message, args, { prefix }) => {
+exports.run = async (client, message, args) => {
     if (!args[0]) return message.hata('Bir kelime girmelisin.')
 
 

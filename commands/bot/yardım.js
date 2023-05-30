@@ -14,6 +14,8 @@ exports.run = async (client, message, args, { prefix }) => {
     const bilgi = `Bir komut hakkında daha fazla almak için \`${prefix}yardım komutadı\` yazın.`, ornek = `Örneğin \`${prefix}yardım çeviri\` gibi.`,
         footer = { iconURL: message.member.displayAvatarURL(), text: `${message.author.tag} tarafından istendi` }
 
+   if (message.options)
+       args[0] = message.options.getString("komut");
 
     if (!args[0]) {
 
@@ -58,7 +60,7 @@ exports.run = async (client, message, args, { prefix }) => {
             .setTimestamp().addField(bilgi, ornek)
 
 
-        const m = await message.reply({ embeds: [embedler.anasayfa], components: [client.BUTONLAR, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
+        const m = await message.reply({ fetchReply: true, embeds: [embedler.anasayfa], components: [client.BUTONLAR, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
         const collector = m.createMessageComponentCollector({ idle: 5 * 60_000 });
 
         collector.on('collect', async interaction => {
@@ -106,7 +108,11 @@ exports.run = async (client, message, args, { prefix }) => {
 };
 
 exports.help = {
+    native: true,
     name: ['yardım', "komutlar"],
     description: 'Komutlar hakkında bilgi verir.',
-    usage: 'yardım [komut adı]'
+    usage: 'yardım [komut adı]',
+    options: [
+        { "type": 3, "name": "komut", "description": "Komuta özel yardım", "required": false }
+    ]
 };

@@ -1,11 +1,13 @@
 console.info("[Kontrolcü] devrede!", "\n\x1b[31m\x1b[40m" + require('figlet').textSync("inos & akis works"), "\x1b[0m");
 
+const { sahip } = require("./util/config")
 const { fork } = require('child_process');
 const { MessageEmbed } = require('discord.js');
 const { kontrolcu } = require("./util/wh");
 const EMBED = new MessageEmbed().setColor("ORANGE").setAuthor({ name: "Kontrolcü" });
-let hata = 0;
+const alphaSTR = "[Kontrolcü] devredışı! 24 saat içinde 5. çökme limiti aşıldı, manuel müdahale isteniyor...";
 
+let hata = 0;
 process.on('SIGTERM', async () => {
   console.log("[Kontrolcü] kapatılıyor!");
 
@@ -19,6 +21,16 @@ process.on('SIGTERM', async () => {
 });
 
 (function create() {
+  if (hata >= 5) {
+    kontrolcu.send(`💥 **[ASB]:** Yakalanamayan ana katman kritik hatası!
+\`\`\`
+${alphaSTR}
+\`\`\`
+||${sahip.map(id => `<@${id}>`).join(", ")}||`).catch(console.error);
+
+    return console.error(alphaSTR);
+  }
+
   fork("app").on("exit", code => {
     create();
 
@@ -36,8 +48,6 @@ process.on('SIGTERM', async () => {
     kontrolcu.send({ embeds: [embed] }).catch(console.error);
 
 
-  }).on("error", e => {
-    console.error("[Kontrolcü] Hata:", e);
-  });
+  }).on("error", e => console.error("[Kontrolcü] Hata:", e));
 
 })();

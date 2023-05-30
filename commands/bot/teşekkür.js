@@ -16,6 +16,6 @@ exports.run = (client, message) => {
 
 exports.help = {
     name: ["teşekkür", "adam"],
-    description: ":heart::heart:Bot ve sahibinin yegane destekçileri:heart::heart:",
+    description: "❤❤Bot ve sahibinin yegane destekçileri❤❤",
     usage: 'teşekkür'
 };

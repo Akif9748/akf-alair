@@ -1,8 +1,8 @@
 const Discord = require("discord.js"); // Discord.js'yi tanımladık.
 const { MessageEmbed } = Discord;
-const { UserModel } = require("../../util/models/");
+const { UserModel } = require("../../util/models");
 
-exports.run = async (client, message, args) => {
+exports.run = async (client, message, args, guild) => {
 
 
     const get = id => client.users.cache.get(id)?.tag || "~~" + id + "~~";
@@ -22,12 +22,14 @@ exports.run = async (client, message, args) => {
     const gonder = veri.map((rank, index) =>
         `**${index + 1}.** ${get(rank._id)} ${seviye(rank.seviye)} • XP: **${rank.xp}**`
     )
-
-    const embeds = [new MessageEmbed().setName("Seviye Sıralaması")
-        .setTitle("» " + message.guild.name)
-        .setDescription(gonder.join("\n"))]
-
-    return message.reply({ embeds })
+    const m = {
+        embeds: [new MessageEmbed().setName("Seviye Sıralaması")
+            .setTitle("» " + message.guild.name)
+            .setDescription(gonder.join("\n"))]
+    };
+    if (!guild.rank)
+        m.content = `Sunucuda rank sistemi aktif değil! Aktif etmek için \`${guild.prefix}rank\` yazın.`;
+    return message.reply(m)
 
 }
 

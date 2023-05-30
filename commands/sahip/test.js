@@ -19,6 +19,7 @@ exports.run = async (client, message, args, _guild) => {
     if (!kod) return message.reply(`Deneyebilmek için bir kod girmelisin!
     \`\`\`js
     const Discord = require("discord.js");
+    const fs = require("fs");
     let Models = require("../../util/models");
     let { User, Guild } = require("../../util/");
     const cp = require("child_process").execSync;

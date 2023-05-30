@@ -7,7 +7,7 @@ module.exports = {
         usage: 'arduinoyap'
     },
 
-    async run(client, message, args) {
+    async run(client, message) {
         const user = await User(message.author.id, "times.arduino arduino"),
             sure = 1000 * 60 * 2,
             asr = Date.now();
@@ -21,7 +21,7 @@ module.exports = {
         user.arduino += amount;
         user.times.arduino = asr;
         await user.save()
-        await message.reply(`**${amount} Arduino** <:arduino:${emoji.arduino}> ürettin.`)
+        await message.reply(`**${amount} Arduino** ${emoji.arduino} ürettin.`)
         await message.react(emoji.arduino);
 
     }

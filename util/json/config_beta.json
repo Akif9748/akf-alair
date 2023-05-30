@@ -1,22 +1,27 @@
 {
+    "alpha": false,
     "sahip": [
         "539506680140922890",
-        "924319187088867378",
-        "655324771390717992"
+        "944253466249945108"
     ],
     "sunucu": "https://discord.gg/9cBnKmjzvH",
+    "mongoURL": " ",
     "prefix": "-",
     "token": " ",
-    "renk": "#736FE9",
-    "bildiri": "841639719724515338",
+    "renk": "#6b44dc",
+    "clientID": "924323674591490119",
+    "serverID": "896760212160118834",
     "yonetim": "970373670159663194",
     "duyuru": "898655778137849896",
     "emoji": {
-        "arduino": "945380301474004993",
-        "ata": "946447644341981184"
+        "arduino": "<:arduino:945380301474004993>",
+        "ata": "<:atc:946447644341981184>",
+        "sol": "<:sol:1098610644258918480>",
+        "sag": "<:sag:1098610641117397003>",
+        "sil": "<:sil:1098610646481903696>"
     },
     "webhooklar": {
-        "kontrolcu": "https://discord.com/api/webhooks/1024058400553844736/M1cq4xGPTeNCnLJ7EfRB9OZBDeuD65T4QljcZNs0nDEYM-XlHtk-J4aY6srplpQg3goS",
-        "asb": "https://discord.com/api/webhooks/1024057049186844744/IRGeQmgeg_luXph9yHeFuqEGT-CZ54PuKCvY6-C6H3sQUIQQIMP4Io1Os-Ob8Zctr3L9"
+        "kontrolcu": " ",
+        "asb": " "
     }
 }

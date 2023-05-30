@@ -5,7 +5,7 @@ exports.run = async (client, message, args) => {
 
     const user = await User(message.author.id, "times.gunluk para"),
         sure = 86400000,
-        miktar = random(2000, 4500),
+        miktar = random(2000, user.manita ? 10000 : 4500),
         asr = Date.now();
 
     if (user.times?.gunluk && sure - (asr - user.times.gunluk) > 0)
@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
     user.times.gunluk = asr;
     await user.save()
 
-    return message.reply(`**${miktar} ATC** <:atacoin:${emoji.ata}> paranı verdim`)
+    return message.reply(`**${miktar} ATC** ${emoji.ata} paranı verdim`)
 
 
 };

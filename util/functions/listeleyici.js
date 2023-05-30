@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js")
  * 
  * @param {Array} arr 
  * @param {MessageEmbed} embed 
- * @returns 
+ * @returns {[MessageEmbed]}
  */
 module.exports = (arr, embed, fun = _ => _) => {
 

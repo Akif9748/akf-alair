@@ -2,48 +2,40 @@
  * 
  * @param {import("discord.js").Client} client 
  * @param {import("discord.js").Message} message 
- * @param {*} args 
+ * @param {[String]} args 
  * @returns 
  */
 exports.run = async (client, message, args) => {
-    if (!message.member.isOwner()) return message.reply(`Bu komutu sadece Bot Sahibi kullanabilir!`);
+    if (!message.member.isOwner()) return message.reply(`Bu komutu sadece bot sahibi kullanabilir!`);
     if (!args[0]) return message.reply("Komut adı eksik!")
 
     let komut = client.commands.get(args[0].toLowerCase());
-    if (!komut) return message.reply("Tüm allasiases dereceleri üzerinde, böyle bir komut yok!");
+    if (!komut) return message.reply("Tüm dereceler üzerinde komut bulunamadı!");
 
     if (typeof komut === "string")
         komut = client.commands.get(komut);
 
-    const { tur, file } = komut;
-    const konum = `../${komut.tur}/${komut.file}`;
+    const { tur, dosyaAdi } = komut;
+    const konum = `../${tur}/${dosyaAdi}`;
     await message.reply("Komut bulundu!\n"
-        + "**Komut adları:** `" + String(komut.help.name) + "`\n"
-        + "**Komut türü:** `" + tur + "`\n"
+        + "**Komut adı:** `" + komut.help.name + "`\n"
         + "**Gizli mi?** `" + (komut.help.gizli ? "Evet" : "Hayır") + "`\n"
         + "**Konum:** `" + konum + "`"
     )
 
-
-
     /* silici */
 
-    let _adlar = komut.help.name;
-    if (!Array.isArray(_adlar)) _adlar = [_adlar];
-
-    client.commands.delete(_adlar[0]);
-
+    let ad = args[0].toLowerCase(); // beta
+    client.commands.delete(ad);
     delete require.cache[require.resolve(konum)];
-    const m = await message.channel.send("Komut " + _adlar.length + " alliasesiyle silindi!")
+
+    const m = await message.channel.send("Komut silindi!");
 
     /* yükleyici */
     const dosya = require(konum);
-    let adlar = dosya.help.name;
-    if (!Array.isArray(adlar)) adlar = [adlar];
+    client.commands.set(ad, { run: dosya.run, help: dosya.help, dosyaAdi, tur, kullanim: 0 });
 
-    client.commands.set(adlar[0], { ...dosya, file, tur });
-
-    await m.edit(`Komut ${adlar.length} alliasesiyle yeniden eklendi!`)
+    return m.edit(`Komut yeniden eklendi!`);
 
 };
 

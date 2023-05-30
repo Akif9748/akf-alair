@@ -1,5 +1,21 @@
 const Discord = require("discord.js");
+const { emoji } = require("..");
 const { MessageActionRow, MessageButton } = Discord;
+const row = new MessageActionRow()
+.addComponents(
+    new MessageButton()
+        .setCustomId('ilk')
+        .setEmoji(emoji.sol)
+        .setStyle('PRIMARY'),
+    new MessageButton()
+        .setCustomId('son')
+        .setEmoji(emoji.sag)
+        .setStyle('PRIMARY'),
+    new MessageButton()
+        .setCustomId('sil')
+        .setEmoji(emoji.sil)
+        .setStyle('DANGER')
+);
 /**
  * 
  * @param {import("discord.js").Message} message 
@@ -8,22 +24,6 @@ const { MessageActionRow, MessageButton } = Discord;
  * @param {function} callback
  */
 module.exports = async (message, reply, son, callback) => {
-
-    const row = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-                .setCustomId('ilk')
-                .setEmoji("◀")
-                .setStyle('PRIMARY'),
-            new MessageButton()
-                .setCustomId('son')
-                .setEmoji("▶")
-                .setStyle('PRIMARY'),
-            new MessageButton()
-                .setCustomId('sil')
-                .setLabel('Mesajı sil').setEmoji("⚠")
-                .setStyle('DANGER')
-        );
 
     const m = await message.reply({ ...reply, components: [row], fetchReply: true });
     const collector = m.createMessageComponentCollector({ idle: 5 * 60_000 });
@@ -80,8 +80,7 @@ module.exports = async (message, reply, son, callback) => {
 
 
     })
+
     collector.on("end", () => m.edit({ components: [] }).catch(_ => _))
-
-
 
 };

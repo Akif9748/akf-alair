@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const emojiler = ["0️⃣", '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
 const { delay } = require("../../util")
 
-exports.run = async (client, message, args, { prefix }) => {
+exports.run = async (client, message, args) => {
 
   const sayı = parseInt(args[0]), anket = args.slice(1).join(" ")
 

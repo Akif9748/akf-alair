@@ -1,6 +1,6 @@
 
 
-exports.run = (client, message, args, { prefix }) => {
+exports.run = (client, message, args) => {
     if (!message.member.isAdmin())
         return message.reply('Üzgünüm, buna yetkin yok :grinning:')
 
