@@ -2,7 +2,7 @@ const asb = require("./util/asb"),
   { Alair, config } = require('./util'),
   mongoose = require('mongoose'),
   { readdirSync } = require("fs"),
-  client = new Alair({ intents: 1927, failIfNotExists: false });
+  client = new Alair();
 
 process.on("SIGTERM", () => asb.sigterm(client));
 
@@ -20,24 +20,19 @@ for (const file of readdirSync('./events'))
 for (const tur of readdirSync('./commands'))
   for (const dosyaAdi of readdirSync(`./commands/${tur}/`)) {
     const dosya = require(`./commands/${tur}/${dosyaAdi}`);
-    const data = dosya.data || dosya.help;
-    let komutAdi = data.name, komutAdlari = [];
+    const anaKomutAdi = dosya.help ? (Array.isArray(dosya.help.name) ? dosya.help.name[0] : dosya.help.name) : dosya.data?.name;
+    if (!anaKomutAdi) continue;
 
-    if (Array.isArray(komutAdi)) {
-      komutAdlari = komutAdi;
-      komutAdi = komutAdi[0];
-      dosya.help.name = komutAdi;
-    } else
-      komutAdlari = [komutAdi];
+    if (dosya.run) [dosya.help.name].flat().forEach((ad, derece) =>
+      client.commands.set(ad, derece ? anaKomutAdi : { run: dosya.run, help: dosya.help, dosyaAdi, tur, kullanim: 0 })
+    );
 
-    if (dosya.run)
-      komutAdlari.forEach((ad, derece) => client.commands.set(ad, derece ? komutAdi : { run: dosya.run, help: dosya.help, dosyaAdi, tur, kullanim: 0 }));
+    if (dosya.help?.native)
+      client.interactions.set(anaKomutAdi, { run: dosya.run, data: { type: 1, ...dosya.help }, kullanim: 0 });
 
-    if (data.native || dosya.runInteraction) {
-      const dosya2 = { run: data.native ? dosya.run : dosya.runInteraction, data, kullanim: 0 }
-      dosya2.data.type ||= 1;
-      client.interactions.set(dosya2.data.name, dosya2);
-    }
+    else if (dosya.data)
+      client.interactions.set(anaKomutAdi, { run: dosya.runInteraction, data: dosya.data, kullanim: 0 });
+
   }
 
 //Toplam komut:

@@ -60,12 +60,12 @@ let iconURL, name;
 /* alair-client */
 
 class Alair extends Discord.Client {
-    constructor(opts) {
-        super(opts);
+    constructor(opts = {}) {
+        super({ ...opts, failIfNotExists: false, intents: 1927 });
         this.token = token;
         this.ayarlar = ayarlar;
         this.version = require("../package.json").version;
-        this.blacklist = []
+        this.blacklist = [];
         this.wh = require("./wh.js");
         this.sunucu = sunucu;
         this.commands = new Discord.Collection();
