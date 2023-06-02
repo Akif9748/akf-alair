@@ -35,7 +35,7 @@ module.exports = async (user, kul) => {
     context.fillStyle = ON_RENK;
 
     // avatar
-    const avatar = await Canvas.loadImage(user.displayAvatarURL({ size: 256, format: "jpg" }));
+    const avatar = await Canvas.loadImage(user.displayAvatarURL({ size: 256, extension: "jpg" }));
     context.drawImage(avatar, canvas.width - 200, margin, 180, 180);
 
     // isim

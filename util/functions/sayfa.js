@@ -6,15 +6,15 @@ const row = new MessageActionRow()
     new MessageButton()
         .setCustomId('ilk')
         .setEmoji(emoji.sol)
-        .setStyle('PRIMARY'),
+        .setStyle('Primary'),
     new MessageButton()
         .setCustomId('son')
         .setEmoji(emoji.sag)
-        .setStyle('PRIMARY'),
+        .setStyle('Primary'),
     new MessageButton()
         .setCustomId('sil')
         .setEmoji(emoji.sil)
-        .setStyle('DANGER')
+        .setStyle('Danger')
 );
 /**
  * 

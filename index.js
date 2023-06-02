@@ -2,9 +2,9 @@ console.info("[Kontrolcü] devrede!", "\n\x1b[31m\x1b[40m" + require('figlet').t
 
 const { sahip } = require("./util/config")
 const { fork } = require('child_process');
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { kontrolcu } = require("./util/wh");
-const EMBED = new MessageEmbed().setColor("ORANGE").setAuthor({ name: "Kontrolcü" });
+const EMBED = new EmbedBuilder().setColor("Orange").setAuthor({ name: "Kontrolcü" });
 const alphaSTR = "[Kontrolcü] devredışı! 24 saat içinde 5. çökme limiti aşıldı, manuel müdahale isteniyor...";
 
 let hata = 0;
@@ -37,10 +37,10 @@ ${alphaSTR}
     console.log("[Kontrolcü] Bot", code, "koduyla bitti, yeniden başlatılıyor!");
     if (process.platform !== "linux" && code === 0) return;
 
-    const embed = EMBED.setTitle(Math.random() > 0.5 ? "Düşürüldü!" : "Çakıldı!").setColor("RED")
+    const embed = EMBED.setTitle(Math.random() > 0.5 ? "Düşürüldü!" : "Çakıldı!").setColor("Red")
 
     if (code === 137)
-      embed.setTitle("`SIGKILL` sinyali ile bitti!").setColor("DARK_GOLD")
+      embed.setTitle("`SIGKILL` sinyali ile bitti!").setColor("DarkGold")
         .setDescription(`Geliştirici ekibi tarafından bota **${code}** koduyla zorunlu \`reset\` attırılıyor!`)
     else
       embed.setTitle("Yakalanamayan hata!").setDescription(`Bot \`${code}\` koduyla \`${++hata == 1 ? "ilk" : hata}\` kez düştü. Tekrar açılıyor!`)

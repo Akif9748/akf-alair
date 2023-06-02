@@ -23,11 +23,11 @@ exports.run = async (client, message, args) => {
 
   } else if (9 >= sayı && sayı >= 1) {
 
-    const msg = await message.channel.send({ embeds: [embed.setFooter({ text: '🔢Haydi oyla!🔢' })] })
+    const msg = await message.channel.send({ embeds: [embed.setFooter({ text: '🔢Haydi oyla!🔢' })] });
     for (let i = 1; i <= sayı; i++)
-      await msg.react(emojiler[i])
+      await msg.react(emojiler[i]);
 
-    await delay(1000)
+    await delay(1000);
     return await message.delete();
 
   } else return message.reply('Şık sayısı sadece 1 ve 9 arasındaki rakamlar olabilir.');

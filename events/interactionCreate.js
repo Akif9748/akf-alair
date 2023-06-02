@@ -34,7 +34,7 @@ module.exports = async interaction => {
     }
 
 
-    else if (!interaction.isSelectMenu()) {
+    else if (!interaction.isStringSelectMenu()) {
         if (!interaction.guild) return interaction.deferReply();
         const komut = client.interactions.get(interaction.commandName);
         try {

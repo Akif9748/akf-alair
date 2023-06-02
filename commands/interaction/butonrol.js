@@ -1,6 +1,17 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js")
 const { ButtonRole } = require("../../util/models/")
+const row = new MessageActionRow()
+.addComponents(
+    new MessageButton()
+        .setCustomId('rolbuton')
+        .setEmoji("🆗")
+        .setStyle('Primary'),
+    new MessageButton()
+        .setCustomId('rolsil')
+        .setLabel('Mesajı sil').setEmoji("⚠")
+        .setStyle('Danger')
+)
 
 
 
@@ -24,21 +35,6 @@ exports.runInteraction = async (client, interaction) => {
     if (interaction.guild.members.me.roles.highest.position <= rol.position) return interaction.reply({ ephemeral: true, content: "Bu rol benim rolumden üstün, bu yüzden rol veremem." })
 
     const açıklama = interaction.options.getString('açıklama') || `${rol.name} rolünu almak için butona basın`;
-
-
-    const row = new MessageActionRow()
-        .addComponents(
-            new MessageButton()
-                .setCustomId('rolbuton')
-                .setEmoji("🆗")
-                .setStyle('PRIMARY'),
-            new MessageButton()
-                .setCustomId('rolsil')
-                .setLabel('Mesajı sil').setEmoji("⚠")
-                .setStyle('DANGER')
-        )
-
-
 
     const embed = new MessageEmbed()
         .setTitle(açıklama).setName("Buton Rol")

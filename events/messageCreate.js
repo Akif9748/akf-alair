@@ -12,7 +12,8 @@ const { duyuru } = require("../util/config"),
  * @returns 
  */
 module.exports = async message => {
-    if (message.author.bot || !["GUILD_TEXT", "GUILD_NEWS"].includes(message.channel.type) || message.client.blacklist.includes(message.author.id)) return;
+    // guild text & guild news
+    if (message.author.bot || ![0, 5].includes(message.channel.type) || message.client.blacklist.includes(message.author.id)) return;
 
     message.content = message.content.replaceAll("\u200e", "");
     if (!message.content) return;
@@ -22,7 +23,7 @@ module.exports = async message => {
     if (channelId === duyuru) return message.react("🎉").catch(_ => _);
 
     const guild = await Guild(guildId);
-    let { prefix, kufur, caps, oto, blacklist, sayi, kelime } = guild;
+    let { prefix, kufur, caps, oto, blacklist } = guild;
 
     if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`)
         return await message.reply(`Buyrun, komutlarımı **${prefix}yardım** yazarak öğrenebilirsiniz.`);
