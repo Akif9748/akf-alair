@@ -27,11 +27,10 @@ for (const tur of readdirSync('./commands'))
       client.commands.set(ad, derece ? anaKomutAdi : { run: dosya.run, help: dosya.help, dosyaAdi, tur, kullanim: 0 })
     );
 
-    if (dosya.help?.native)
-      client.interactions.set(anaKomutAdi, { run: dosya.run, data: { type: 1, ...dosya.help }, kullanim: 0 });
-
-    else if (dosya.data)
+    if (dosya.data)
       client.interactions.set(anaKomutAdi, { run: dosya.runInteraction, data: dosya.data, kullanim: 0 });
+    else if (dosya.help?.native || dosya.runInteraction)
+      client.interactions.set(anaKomutAdi, { run: dosya.runInteraction || dosya.run, data: { type: 1, ...dosya.help }, kullanim: 0 });
 
   }
 
