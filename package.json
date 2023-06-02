@@ -1,6 +1,6 @@
 {
   "name": "alair",
-  "version": "9.1.1",
+  "version": "9.1.2",
   "description": "2021'in ocak ayından beri geliştirilen Alair...",
   "main": "index.js",
   "scripts": {
