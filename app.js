@@ -1,4 +1,4 @@
-const asb = require("./util/asb"),
+const asb = require("./util/lib/asb"),
   { Alair, config } = require('./util'),
   mongoose = require('mongoose'),
   { readdirSync } = require("fs"),
