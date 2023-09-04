@@ -9,7 +9,7 @@
     "deploy": "node scripts/deploy.js"
   },
   "author": "Akif9748",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "https://github.com/Akif9748/akf-alair.git"

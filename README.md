@@ -19,6 +19,30 @@ prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
 !ban <@kullanıcı | id> [sebep]
 ```
 
+## Özellik bildirimleri:
+Tamamen özelleştirilebilir. Alair baz sistemden getirilen bazı özellikler:
+- **Alair-Client**, **Alair-Embed** aktarıldı. 
+- **Webpanel**
+- `ana / alt katmanlar` `app.js` Komut, interaction ve event yükleyicileri.
+- `index.js` **ASB - Kontrolcü**: Botun çökme vs. tüm hata, bilgilendirmelerini size gösterir.
+- **Blokerler**: (küfür, caps) engeller.
+- **butonrol**: Butonlarla rol verir.
+- **custom**: Özel komutlar eklersiniz.
+- **oto_cevap 1. katman**: Basit oto cevap sistemi (aç kapa var)
+- **oto_cevap 2. katman**: Bu ise botun `sor` komutu için. (minor)
+- **Sunucuya katılınca atılan mesaj.** Minor. Merkez sunucuya gelene verilen rol yok.
+- **Rank** sistemi. Tüm özellikleriyle. Sunucudakilerin rankını sıralama da dahil.
+- **Ekonomi** (minor) sistem. Para, arduino al sat, bahis, gönder, günlük ve sıralaması var.
+- **Komuta göre otomatik renderleyen yardım komutu**
+- **Bot-Bilgi**
+- **Çeşitli** komutlardan 2 tane bizim modüllerimizle yapılan komut, `ara` ve `tdk`.
+- **Karaliste** sistemi: Kanalda komut kullanımı kapatmak.
+- **Black** sistemi: Sahip komutu, botu bazı kişilere karşı kapatmak.
+- **Reset ve eval**.
+- **prefix** değiştirme.
+- **Rank** açma ve kapatma
+- **Telemetri**
+
 ## Sistem yapılandırması:
 
 1. **Ana/alt katman:** `index.js` / `app.js` => En hızlı ve hayati önem taşıyan katman. Kontrolcü + bot. Kontrolcü es geçilerek çalıştırılabilir! 
