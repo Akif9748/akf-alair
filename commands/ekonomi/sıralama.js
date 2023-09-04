@@ -1,12 +1,8 @@
-const Discord = require("discord.js"); // Discord.js'yi tanımladık.
-const { MessageEmbed } = Discord;
+const { MessageEmbed } =  require("discord.js");
 const { UserModel } = require("../../util/models");
 
 exports.run = async (client, message, args, guild) => {
-
-
-    const get = id => client.users.cache.get(id)?.tag || "~~" + id + "~~";
-
+    const get = id => client.users.cache.get(id)?.username || "~~" + id + "~~";
     const seviye = seviye => seviye ? "Seviye: **" + seviye + "**" : "";
 
     const path = `guilds.${message.guildId}`,
@@ -35,7 +31,8 @@ exports.run = async (client, message, args, guild) => {
 
 
 exports.help = {
-    name: ["sıralama", 'ranklist'],
+    native: true,
+    names: ["sıralama", 'ranklist'],
     description: 'Sunucu seviye sıralaması!',
     usage: 'sıralama'
 };

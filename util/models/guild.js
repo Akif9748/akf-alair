@@ -1,33 +1,25 @@
 const mongoose = require('mongoose');
-const { prefix } = require("../config")
+const createCache = require('./__cache');
+const { prefix } = require("../config");
+
 const guildSema = new mongoose.Schema({
 
     //MAIN: 
     _id: { type: String, unique: true },
+    prefix: { type: String, set: p => p.slice(0, 5), default: prefix },
 
     //ARRAYLAR
     blacklist: [String],
 
-    //STRINGLER
-    prefix: { type: String, default: prefix },
+    //BOOLLAR
 
+    rank: Boolean,
     oto: Boolean,
-    kufur: Boolean,
-    caps: Boolean
 
+    kufur: Boolean,
+    caps: Boolean,
+  
 
 }, { versionKey: false });
 
-const cache = new Map();
-guildSema.fetchCache = () => cache;
-guildSema.getCache = id => cache.get(id);
-guildSema.feedCache = d => {
-    if (d) cache.set(d._id, d);
-    return d;
-}
-guildSema.pre('save', function (next) {
-    guildSema.feedCache(this);
-    next();
-});
-
-module.exports = mongoose.model('guild', guildSema);
+module.exports = mongoose.model('guild', createCache(guildSema));

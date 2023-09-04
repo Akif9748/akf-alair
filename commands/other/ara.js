@@ -1,8 +1,7 @@
-const Discord = require("discord.js");
+const { MessageEmbed } =require("discord.js");
 const gis = require('async-g-i-s');
-const { MessageEmbed } = Discord;
-
 const sayfa = require("../../util/functions/sayfa");
+
 /**
  * 
  * @param {import("discord.js").Client} client 
@@ -11,13 +10,8 @@ const sayfa = require("../../util/functions/sayfa");
  * @returns 
  */
 exports.run = async (client, message, args) => {
-    if (message.options)
-        args[0] = message.options.getString("sorgu");
-
-    if (!args[0]) return message.hata()
-
-    const aramaterimi = args.join(" ")
-
+    const aramaterimi = message.options?.getString("sorgu") || args.join(" ");
+    if (!aramaterimi) return message.hata()
 
     try {
 
@@ -46,10 +40,10 @@ exports.run = async (client, message, args) => {
 
 exports.help = {
     native: true,
-    name: ['ara', 'bul'],
+    names: ['ara', 'bul'],
     description: 'Görsel arama',
     usage: 'ara <sorgu>',
     options: [
-        { "type": 3, "name": "sorgu", "description": "Arayacağım şeyi gir!", "required": true }
+        { type: 3, name: "sorgu", description: "Arayacağım şeyi gir!", required: true }
     ]
 };

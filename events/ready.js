@@ -1,17 +1,21 @@
 const { MessageEmbed } = require("discord.js");
-const os = require("os")
+const os = require("os");
+const { alpha } = require("../util/config");
+
 /**
  * Alair alt katman dosyası / ready.js
  * @param {Client} client 
  */
 module.exports = async client => {
   require("../server")(client);
-  console.log(client.guilds.cache.size, "sunucu ve", client.users.cache.size, "kişiyle hazır!");
+  client.logger.log("HAZIR", client.guilds.cache.size, "sunucu ve", client.users.cache.size, "kişi ile hazır!");
 
-  setInterval(() => client.user.setPresence({ activities: [{ type: 2, name: client.guilds.cache.size + " sunucuyla /yardım'ı" }], status: 'dnd' }), 60_000 * 2)
+  client.user.setStatus("dnd");
+  const fun = () => client.user.setActivity(client.guilds.cache.size + " sunucuya `/yardım` ediyor", { type: 4 });
+  fun();
+  setInterval(fun, 60_000 * 10);
 
-
-  if (process.platform !== "linux") return;
+  if (!alpha) return;
 
   const embed = new MessageEmbed().setAuthor({ name: client.user.username, iconURL: client.user.avatarURL() })
     .setTitle(`Tekrardan hazır!`).setColor("Green").setDescription(`${os.cpus()[0].model} üzerinde, \`${Date.now() - client.ayarlar.start}ms\` içinde hazırlandı!`)

@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 const Discord = require("discord.js");
 const fs = require("fs");
+const util = require("util");
+
 let Models = require("../../util/models");
 let { User, Guild } = require("../../util/");
-const cp = require("child_process").execSync;
-
+let cp = require("child_process").execSync;
 
 exports.run = async (client, message, args, _guild) => {
   if (!message.member.isOwner()) return;
@@ -36,7 +37,7 @@ exports.run = async (client, message, args, _guild) => {
 
 
     if (typeof sonuc !== 'string')
-      sonuc = require('util').inspect(sonuc, { depth: 0 });
+      sonuc = util.inspect(sonuc, { depth: 0 });
 
 
     return message.reply({
@@ -54,7 +55,8 @@ exports.run = async (client, message, args, _guild) => {
 
 
 exports.help = {
-  name: ['test', "eval", "kod"],
+  names: ['test', "eval", "kod"],
   description: 'Kod denemeyi sağlar.',
-  usage: 'test <kod>', gizli: true
+  usage: 'test <kod>', 
+  gizli: true
 };

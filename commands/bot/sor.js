@@ -4,7 +4,8 @@ exports.run = async (client, message, args, { prefix }) => {
 
 }
 exports.help = {
-    name: 'sor',
+    native: true,
+    names: ["sor"],
     description: 'Bota soru sorar.',
     usage: 'sor <soru>',
 };

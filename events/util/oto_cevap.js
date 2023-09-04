@@ -31,7 +31,7 @@ const genel_yanit = {
   "çıkacam": "Kiminle çıkacan?",
   "çıkacağım": "Kiminle??",
   'olr': "Olmaz mıı?",
-  "31": { content: 'SJ çok komik ben gülmek ölmek', files: ["https://cdn.discordapp.com/attachments/930555249041735711/1021495517739483286/unknown.png"] },
+  "31": { content: 'SJ çok komik ben gülmek ölmek', files: ["https://i.redd.it/vaavlsszf0a71.jpg"] },
   "cu": { content: 'cu çok komik ben gülmek ölmek', files: ["https://foto.haberler.com/haber/2021/06/17/sj-ne-demek-s-ve-j-hikayesi-nedir-sosyal-14206005_2219_m.jpg"] },
   "gençleştim": {
     content: 'Gençleştim resmen! Bu kadar mı fark eder?',
@@ -48,9 +48,9 @@ const genel_yanit = {
  * @returns {Message} Mesaj olarak döner
  */
 module.exports = async (msg, prefix, komut) => {
-  const { channel, client, guild, content, mentions } = msg;
+  const { client, guild, content, mentions } = msg;
 
-  if (!guild.members.me.perm("EMBED_LINKS") || !guild.members.me.permissionsIn(channel).has("EMBED_LINKS"))
+  if (!guild.members.me.perm("EMBED_LINKS"))
     return await msg.reply("Embed mesaj gönderme yetkim kapalı.").catch(_ => _);
 
   //MESAJ İÇERİĞİ:
@@ -83,6 +83,6 @@ module.exports = async (msg, prefix, komut) => {
       return await otoCevap(msg, msj);
 
   } catch (e) {
-    console.error(e)
+    client.logger.ierror("OTOCEVAP SISTEMI", e);
   }
 }

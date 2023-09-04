@@ -1,3 +1,4 @@
+const { Resolvers } = require("../../util");
 
 
 exports.run = (client, message, args) => {
@@ -6,19 +7,28 @@ exports.run = (client, message, args) => {
 
     if (!args[0]) return message.hata("Tekrarlanacak şeyi yaz!")
 
-    const textChannel = message.mentions.channels.first();
+    let textChannel, content;
+    if (message.options) {
+        textChannel = message.options.getChannel("kanal");
+        content = message.options.getString("mesaj");
+        message.reply({ content: `Mesaj gönderildi!`, ephemeral: true }).catch(_ => _)
+    } else {
+        textChannel = Resolvers.Channel({ message, channelType: "text" });
+        content = args.slice(textChannel ? 1 : 0).join(" ");
+        message.delete().catch(_ => _);
+    }
+    textChannel ||= message.channel;
 
-    message.delete().catch(_ => _)
-
-    if (textChannel)
-        return textChannel.send(args.slice(1).join(" "))
-    else
-        return message.channel.send(args.join(" "))
-
+    return textChannel.send(content);
 };
 
 exports.help = {
-    name: ["tekrarla", 'söyle'],
+    native: true,
+    options: [
+        { name: "mesaj", description: "Mesajın içeriği", type: 3, required: true },
+        { name: "kanal", description: "Mesajın gönderileceği kanal", type: 7 }
+    ],
+    names: ["tekrarla", 'söyle'],
     description: 'Söylediğiniz şeyi tekrarlar.',
     usage: 'söyle [#kanal] <mesaj>'
 };

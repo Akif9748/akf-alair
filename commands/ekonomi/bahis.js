@@ -2,7 +2,9 @@ const { User, delay, random } = require("../../util");
 const emojiler = ["🍇", "🍊", "🍒"];
 
 exports.run = async (client, message, args) => {
-    const bahis = parseInt(args[0]);
+    const bahis =
+        message.options?.getInteger("miktar") ||
+        parseInt(args[0]);
 
     if (!bahis || bahis <= 0) return message.hata("Miktarı girmeyi unuttunuz.")
 
@@ -22,7 +24,7 @@ exports.run = async (client, message, args) => {
         do {
             rndm3 = emojiler[Math.floor(Math.random() * emojiler.length)];
         } while (rndm3 == rndm1 && rndm3 == rndm2);
-        
+
         await message.reply(`${rndm1} **:** ${rndm2} **:** ${rndm3}\n\`\`\`Kaybettin. Paranı aldım.\`\`\``);
     }
     await kul.save()
@@ -30,7 +32,16 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-    name: ["bahis", "slot"],
+    native: true,
+    options: [
+        {
+            name: "miktar",
+            description: "Bahis miktarı",
+            type: 4,
+            required: true
+        }
+    ],
+    names: ["bahis", "slot"],
     description: 'Botla bahse gir!',
     usage: 'bahis <miktar>'
 };

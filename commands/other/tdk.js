@@ -3,12 +3,13 @@ const turkce = require("turkce");
 
 
 exports.run = async (client, message, args) => {
-    if (!args[0]) return message.hata('Bir kelime girmelisin.')
+    const klm = message.options?.getString("kelime") || args.join(' ');
+    if (!klm) return message.hata('Bir kelime girmelisin.')
 
 
     try {
 
-        const sonuc = await turkce(args[0]);
+        const sonuc = await turkce(klm);
         if (!sonuc) return message.reply("TDK'de böyle bir kelime yok!")
         const { kelime, anlam, lisan, ornek, atasozu } = sonuc;
         const embed = new Discord.MessageEmbed()
@@ -30,17 +31,23 @@ exports.run = async (client, message, args) => {
         if (atasozu)
             embed.addField('Atasözü:', atasozu)
 
-        if (!embed.fields.length) return message.reply("Kelime hakkında yeterli bilgi yok!")
+        if (!embed.data.fields.length) return message.reply("Kelime hakkında yeterli bilgi yok!")
 
         return message.reply({ embeds: [embed] })
     } catch (e) {
         await message.reply(e.message)
-        console.error(e)
+        client.logger.ierror("TDK Komutu", e);
     }
 };
 
 exports.help = {
-    name: 'tdk',
+    native: true,
+    options: [
+        {
+            name: "kelime", description: "TDK'de aranacak kelime.", type: 3, required: true
+        }
+    ],
+    names: ["tdk"],
     description: 'TDK apisini kullanarak yazdığınız kelime hakkında bilgi verir.',
     usage: 'tdk <kelime>'
 };

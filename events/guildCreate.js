@@ -13,7 +13,7 @@ module.exports = async guild => {
   guild.client.channels.cache.get(yonetim).send(`📈 BOT EKLENDİ: 
     \`\`\`
 YER: ${guild.name} (${guild.id})
-SAHİBİ: ${owner?.user.tag} (${guild.ownerId})
+SAHİBİ: ${owner?.user.username} (${guild.ownerId})
 KİŞİ SAYISI: ${guild.memberCount}\`\`\``
 ).catch(_ => _)
 

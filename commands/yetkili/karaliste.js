@@ -1,9 +1,12 @@
+const { Resolvers } = require("../../util");
+
 exports.run = async (client, message, args, guild) => {
 
     if (!message.member.isAdmin())
         return message.reply('Üzgünüm, buna yetkin yok :grinning:')
-    if (!args[0]) return message.hata("Komut kullanılamayacak kanalı etiketleyin.")
-    const kanal = message.guild.channels.cache.get(args[0].replace("!", "").replace("<#", "").replace(">", ""))
+
+
+    const kanal = message.options?.getChannel("kanal") || Resolvers.Channel({ message, type: "text" });
     if (!kanal) return message.reply("Böyle bir kanal yok")
 
     const durum = guild.blacklist.includes(kanal.id);
@@ -22,7 +25,13 @@ exports.run = async (client, message, args, guild) => {
 };
 
 exports.help = {
-    name: "karaliste",
+    native: true,
+    options: [
+        {
+            name: "kanal", description: "Komut kullanılamayacak kanalı etiketleyin.", type: 7, required: true
+        }
+    ],
+    names: ["karaliste"],
     description: 'Dilediğiniz kanalda komutlara yanıt vermeyi keser.',
     usage: 'karaliste <#kanal>'
 };

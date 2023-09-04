@@ -1,6 +1,24 @@
-const Discord = require('discord.js')
-const { MessageActionRow, MessageEmbed, MessageSelectMenu } = Discord;
-const { türler } = require("../../util");
+const { MessageActionRow, MessageEmbed, MessageSelectMenu } = require('discord.js');
+
+const { turler } = require("../../util");
+
+const options = [
+    { label: "Ana Sayfa", description: "Ana sayfa, tüm kategorilerin listesi", value: "anasayfa", emoji: "📖" },
+    { label: "Mesajı sil", description: "Yardım menüsünü imha eder!", value: "sil", emoji: "⚠" },
+    ...turler.map(t => ({
+        label: t.ad,
+        description: t.aciklama,
+        value: t.klasor,
+        emoji: t.emoji
+    }))
+]
+const anasayfa = turler.map(tur => `» ${tur.emoji} • ${tur.aciklama}`);
+const bilgi2 = {
+    name: "Bazı komutlar hem `interaction` hem de `prefix` ile kullanılabilirler",
+    value: "Bu komutlar tabloda belirtilmiştir."
+};
+
+let aciklamalar;
 
 /**
  * 
@@ -11,54 +29,64 @@ const { türler } = require("../../util");
  * @returns 
  */
 exports.run = async (client, message, args, { prefix }) => {
-    const bilgi = `Bir komut hakkında daha fazla almak için \`${prefix}yardım komutadı\` yazın.`, ornek = `Örneğin \`${prefix}yardım çeviri\` gibi.`,
-        footer = { iconURL: message.member.displayAvatarURL(), text: `${message.author.tag} tarafından istendi` }
+    const bilgi = {
+        name: `Bir komut hakkında daha fazla almak için \`${prefix}yardım komutadı\` yazın.`,
+        value: `Örneğin \`${prefix}yardım bot\` gibi.`
+    },
+        footer = { iconURL: message.member.displayAvatarURL(), text: `${message.author.username} tarafından istendi` };
 
-   if (message.options)
-       args[0] = message.options.getString("komut");
+
+    if (message.options)
+        args[0] = message.options.getString("komut");
 
     if (!args[0]) {
+        if (!aciklamalar) {
+            const komutlar = client.commands.filter(x => typeof x !== "string" && !x.help.gizli);
+            aciklamalar = new Map(turler
+                .filter(t => t.klasor !== "interaction") //
+                .map(t => [t.klasor,
+                komutlar.filter(x => x.tur === t.klasor).map((value, key) => ({
+                    native: value.help.native,
+                    description: value.help.description,
+                    name: key,
+                    slashName: value.help.subcommand ? `/${value.help.subcommand} ${key}` : `/${key}`,
+                    usage: value.help.usage
+                }))
+                ]));
 
-        const description = { anasayfa: "", ...türler }, embedler = {};
-
-        for (const i in description) description[i] = "";
-
-        for (const [key, value] of client.interactions)
-            description.interaction += value.data.type === 1 ? `• **/${key}**: ${value.data.description}\n`
-                : `• **${key}**: ${value.data.type === 3 ? "Mesaj" : "Kullanıcı"} tipi interaction\n`;
-
-        for (const [key, value] of client.commands)
-            if (typeof value !== "string" && !value.help.gizli)
-                description[value.tur] += `• **${prefix + key}**: ${value.help.description}\n`;
-
-        const options = [{ label: "Ana Sayfa", description: "Ana sayfa, tüm kategorilerin listesi", value: "anasayfa", emoji: "📖" }, { label: "Mesajı sil", description: "Yardım menüsünü imha eder!", value: "sil", emoji: "⚠" }];
-
-        for (const tür in türler) {
-            if (tür === "sahip") continue;
-
-            description.anasayfa += `» ${türler[tür].emoji} • ${türler[tür].aciklama}\n`
-
-            options.push(
-                {
-                    label: türler[tür].ad,
-                    description: türler[tür].aciklama,
-                    value: tür, emoji: türler[tür].emoji
+            aciklamalar.set("interaction", client.interactions.filter(x => !x.data.native).map(
+                ({ data }, key) => {
+                    data.type ||= 1;
+                    return {
+                        name: `${data.type === 1 ? "/" : ""}${key}`,
+                        description: data.type === 1 ? (data.description || "**Subcommand** olarak kullanılabilir") : `**${data.type === 3 ? "Mesaj" : "Kullanıcı"}** arayüzünde bulunur`
+                    }
                 }
-            )
-
-            embedler[tür] = new Discord.MessageEmbed().setDescription(description[tür])
-                .setTitle(`» ${türler[tür].emoji} ${türler[tür].ad} komutları:`)
-                .setTimestamp().addField(bilgi, ornek).setName("Yardım menüsü")
-
-                .setFooter(footer)
+            ));
         }
 
+        const embedler = {
+            anasayfa: new MessageEmbed()
+                .setTitle("» Ana sayfa")
+                .addField(":book: Sayfalar:", anasayfa.join("\n"))
+                .setName("Yardım menüsü")
+                .setFooter(footer).addFields(bilgi)
+        }
 
-        embedler.anasayfa = new Discord.MessageEmbed()
-            .setTitle("» Ana sayfa").setName("Yardım menüsü")
-            .addField(":book: Sayfalar:", description.anasayfa).setFooter(footer)
-            .setTimestamp().addField(bilgi, ornek)
-
+        for (const tur of turler)
+            embedler[tur.klasor] = new MessageEmbed()
+                .setTitle(`» ${tur.emoji} ${tur.ad} komutları:`)
+                .setDescription(aciklamalar.get(tur.klasor).map(
+                    x =>
+                        //////////////////////
+                        tur.klasor === "interaction" ?
+                            `• \`${x.name}\`: ${x.description}`
+                            :
+                            //////////////////////
+                            `${x.native ? `• \`${x.slashName}\` -` : "•"} \`${prefix + x.name}\`: ${x.description}`
+                ).join("\n"))
+                .setName("Yardım menüsü")
+                .setFooter(footer).addFields(bilgi, bilgi2)
 
         const m = await message.reply({ fetchReply: true, embeds: [embedler.anasayfa], components: [client.BUTONLAR, new MessageActionRow().addComponents(new MessageSelectMenu().addOptions(options).setPlaceholder('Hakkında yardım almak istediğin kategoriyi seçebilirsin!').setCustomId("main"))] })
         const collector = m.createMessageComponentCollector({ idle: 5 * 60_000 });
@@ -90,14 +118,19 @@ exports.run = async (client, message, args, { prefix }) => {
             komut = client.commands.get(komut);
 
         if (komut && !komut.help.gizli) {
-
+            const komutTur = turler.find(t => t.klasor === komut.tur)
             const embed = new MessageEmbed()
-                .setName("Yardım menüsü").setTitle(`**${prefix + args[0]}** hakkında yardım`)
+                .setName("Yardım menüsü")
+                .setTitle(`\`${komut.help.names[0]}\` hakkında yardım`)
+                .addField("Komutun tüm adları:", `\`\`\`${String(komut.help.names)}\`\`\``)
                 .addField("Komut hakkında bilgi:", komut.help.description)
                 .addField("Komut kullanımı:", prefix + komut.help.usage)
-                .addField("Kategori:", türler[komut.tur].ad)
+                .addField("Kategori:", komutTur.ad)
+                .setFooter(footer);
 
-                .setFooter(footer)
+            if (komut.help.native)
+                embed.addField("🆕 Bu komut interaction desteklemektedir!", `\`/${komut.help.names[0]}\` olarak kullanılabilir`);
+
             return message.reply({ embeds: [embed] })
         } else {
             const embed = new MessageEmbed().setFooter(footer)
@@ -109,10 +142,10 @@ exports.run = async (client, message, args, { prefix }) => {
 
 exports.help = {
     native: true,
-    name: ['yardım', "komutlar"],
+    names: ['yardım', "komutlar"],
     description: 'Komutlar hakkında bilgi verir.',
     usage: 'yardım [komut adı]',
     options: [
-        { "type": 3, "name": "komut", "description": "Komuta özel yardım", "required": false }
+        { type: 3, name: "komut", description: "Komuta özel yardım", required: false }
     ]
 };

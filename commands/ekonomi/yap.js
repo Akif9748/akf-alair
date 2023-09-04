@@ -2,7 +2,8 @@ const { User, emoji, parsems } = require("../../util");
 
 module.exports = {
     help: {
-        name: ["arduinoyap", "yap", "üret"],
+        native: true,
+        names: ["arduinoyap", "yap", "üret"],
         description: "Arduino üretirsin.",
         usage: 'arduinoyap'
     },
@@ -22,7 +23,6 @@ module.exports = {
         user.times.arduino = asr;
         await user.save()
         await message.reply(`**${amount} Arduino** ${emoji.arduino} ürettin.`)
-        await message.react(emoji.arduino);
 
     }
 }

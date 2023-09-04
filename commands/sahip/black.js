@@ -22,7 +22,8 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-    name: "black",
+    names: ["black"],
     description: 'Şerefsiz sikici',
-    usage: 'black [@kişi]', gizli: true
+    usage: 'black [@kişi]', 
+    gizli: true
 };

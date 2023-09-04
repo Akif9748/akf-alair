@@ -10,7 +10,9 @@ exports.run = async (client, message, args, guild) => {
 };
 
 exports.help = {
-    name: ["küfür", "küfürengel"],
+    native: true,
+    subcommand: "korumalar",
+    names: ["küfür", "küfürengel"],
     description: 'Küfür engelleme sistemi',
     usage: 'küfür'
 };

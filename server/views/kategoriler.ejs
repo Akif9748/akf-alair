@@ -11,9 +11,8 @@
       <h2><%= alair.user.username %> komut kategorileri</h2>
       <hr>
 
-      <% for (const tür in türler) { %>
-        <% if (tür === "sahip") continue; %>
-        <a class="btn btn-komut text-white" href="/komutlar/<%= tür  %>"><%= türler[tür].emoji  %> <%= türler[tür].aciklama  %></a>
+      <% for (const tur of turler) { %>
+        <a class="btn btn-komut text-white" href="/komutlar/<%= tur.klasor %>"><%= tur.emoji  %> <%= tur.aciklama  %></a>
       <% } %> 
       <hr>
       <p>Daha fazla yardım için:</p>

@@ -1,11 +1,11 @@
 # Alair
-akf-alair-v13, baz system.
+akf-alair-v14, baz system.
 
 ## KURULUM TALIMATLARI:
 - `util/json/config.json` & `util/json/config_beta.json` dosyalarını ayarlayın. Ana config bot linuxda çalışırken çalışacaktır, beta config ise diğer işletim sistemlerinde. Davranışı değiştirmek için `util/config.js` dosyasını konfigure edin. Kontrolcü davranışı üzerinde değişiklik yapmak için `index.js`'yi değiştirin.
-- `util/index.js` kategorileri komut kategorileri ekleyip sildiğinizde işe yarar. Yardım komutu için.
+- `util/index.js` kategorileri komut kategorileri ekleyip sildiğinizde işe yarar. Yardım komutu ve site için.
 - Konsola `npm i` yazın.
-- `node deploy` yazarak komutları deploy edebilirsiniz.
+- `npm run deploy` yazarak komutları deploy edebilirsiniz.
 - Sonra `npm start` (production) / `npm test` (development) yazınca çalışmalıdır.
 
 ## Kanlı canlı versiyonunu eklemek için:
@@ -31,10 +31,10 @@ prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
 3. **Orta (alt-üst) katman:** `events/util/` => altındaki kalan dosyalar, kelime oyunu gibi, alt-üst katman kombinasyonunu içeren dosyalar. 
 *Üst katmanlara göre daha sıkı yönetilen, ama en az 1 alt katman üzerinden erişilen yerler.*
 
-4. **Üst katmanlar:**  `commands/` & `interactions/` & `buttons/` => kullanıcıyla direkt iletişim halinde olan katmanlar. 
-*En çok hatanın meydana göz ardı edildiği yer*
+4. **Üst katmanlar:**  `commands/` & `interactions/` => kullanıcıyla direkt iletişim halinde olan katmanlar. 
+*En çok hatanın meydana gelip göz ardı edildiği yer*
 
-5. **Destek katmanı:**  `util/` => klasör içindeki tüm destek yapıları. Bunlar tüm katmanlar ile bağlantılıdır. 
+5. **Ara/Destek katmanı:**  `util/` => klasör içindeki tüm destek yapıları. Bunlar tüm katmanlar ile bağlantılıdır. 
 *Tüm katmanlara destek veren, **Alair-Core**, **ASB**, modeller, fonksionlar, resimler, sabitler, config/json yapıları vs.*
 
 ## Güvenlik:
@@ -49,6 +49,8 @@ prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
 - **Kontrolcü** (halka açık), yüzeysel bilgiler verir. Kapanmalar, resetler, ve kritik ana sistem hataları.
 
 ## Sürüm notları (Major):
+- V11.X.X Tüm komutlar interactiona çevirildi. Handlere subcommands eklendi.
+- V10.X.X V14 geçişi. Müzik webpaneli & Distube ile daha iyi müzikler.
 - V9.X.X Komut-interaction birleştirildi!
 - V8.X.X Webpanel!
 - V7.X.X MemberModel iptali!
@@ -67,30 +69,42 @@ prefix + komutadi + <> = zorunlu | [] = isteğe bağlı
 
 ### **Handlerler:**
 - **Event handler:** doğrudan alt katmandaki dosyaların adlarıyla bağlanır.
-- **interaction handler:** dosyadaki SlashCommandBuilder verisinden alınan bilgilerle anahtarlanıp, dosya ile keylenir.
-- **command/interaction handler:**
-    - KEY: komutadı
-    - VALUE: Eğer 1. dereceden ise komutun kendisi, eğer diğer derecelerden ise 1. derecenin adı.
+- **COMMAND/INTERACTION HANDLER:**
     - Eğer komut dosyasında interaction da varsa, onu da interactionlara kaydeder
-#### Dosya yapısı:
+    - **command:**
+        - KEY: Komutun adı
+        - VALUE: Eğer 1. dereceden ise komutun `(aşağıda)` kendisi, eğer diğer derecelerden ise 1. derecenin adı.
+
+#### Komutun dosya yapısı:
 ```js
 const dosya = { 
     help: { 
         native:true, // interaction destekliyor ise
-        name: ["ana isim/interaction ismi", "allias1", ...alliasesler ],
+        subcommand:"maincommand", // interaction ise, subcommand moduna geçirir.
+        names: ["ana isim/interaction ismi", "allias1", ...alliasesler ],
         description: 'Yardımda renderlenecek açıklama',
         usage: 'komut özel yardımdaki kullanım...',
         options: {}, // INTERACTION ICIN: options vs gibi alanlar, interaction içeren komut için.
         gizli: true // renderlenmeyecek ve gizli çalışan, typingsiz komutlar için
     },
 
-    data: {}, // INTERACTION ICIN: helpden bağımsız ise, burası çözer
-    runInteraction(client, interaction) { }, // INTERACTION ICIN: eğer komutta interaction varsa, çalışması için
-    fonksiyon: () => { }, // INTERACTION ICIN: komutun fonksiyonu kendinden ayrı ise.
+    data: {}, // INTERACTION ICIN: helpden bağımsız ise, burası çözer (sadece interaction çalışan komutlar için)
+    async runInteraction(client, interaction, guild) { }, // INTERACTION ICIN: eğer komutta interaction varsa, çalışması için (sadece interaction çalışan komutlar için)
 
     tur: "other", // komut türü, klasör ismiyle aynı
     dosyaAdi: "dosya.js", // hangi dosya oldugu
-    run (client, message, args, guild) { return Message || void; },
-    derece: 0// derece ise kaçıncı allias olduğunu gösterir.sadece 0. allias renderlenir. 
+    kullanim: 0, // telemetri için kullanım verisi.
+    async run (client, message, args, guild) { return Message || void; }
 }
 ```
+
+- **interaction handler:**
+Hybrid çalışır. 
+
+Eğer dosyada `data` varsa `runInteraction` üzerinden `data` verisiyle çalışır.
+
+Eğer dosyada `native: true` ibaresi varsa, `run` üzerinden `help` verisiyle çalışır.
+
+Eğer dosyada `subcommand:` ibaresi varsa, `subcommand` modunda çalışır.
+Bu modda interaction içine interaction açılmış olur.
+`native: true` ibaresine göre `runInteraction` veya `run` ile çalışır. 1. katmandaki interactionda `run` yerine `subcommands` olur. Handler 2. katmandaki `subcommands`dan normal bir interaction gibi veriyi çekerek çalışır. Fakat telemetri ve ratelimitler `subcommands`a göre değil, ana komuta göre çalışır.

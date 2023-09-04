@@ -7,6 +7,9 @@
   <%- include("extra/navbar") %>
 
   <div class="container-sm alair-trans center" >
+    <% if (kul) { %>
+      <p><a href="https://discord.com/users/<%= kul.id %>"><strong><%= kul.username %></strong></a> Alair seni cok seviyor, neden acaba ?? ❤</p>
+    <% } %>
     <% tesekkur.forEach(e => { %>
       <p><a href="https://discord.com/users/<%= e.id %>"><strong><%= e.name %></strong></a> <%= e.text %></p>
     <% }) %>

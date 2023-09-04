@@ -3,23 +3,23 @@ exports.run = async (client, message, args, guild) => {
     if (!message.member.isAdmin())
         return message.reply('Üzgünüm, buna yetkin yok :grinning:')
 
-    if (!args[0]) return message.hata("Geçerli bir ön ek girdiğinizden emin olun.")
+    const prefix = message.options?.getString("prefix").split(" ")[0] || args[0];
 
-    if (args[0] == "!") {
+    if (!prefix || prefix == "!") {
         guild.prefix = "!";
-        await message.reply("Prefix artık **varsayılan** olan **!**")
-
+        await message.reply("Prefix artık **varsayılan** olan **!**");
     } else {
-        guild.prefix = args[0];
-        await message.reply("Prefix artık **" + guild.prefix + "**")
-
+        guild.prefix = prefix;
+        await message.reply("Prefix artık **" + guild.prefix + "**");
     }
-    await guild.save()
+    await guild.save();
 
 };
 
 exports.help = {
-    name: "prefix",
-    description: 'Prefixi değiştirmek içindir.',
-    usage: 'prefix <prefix>'
+    native: true,
+    options: [{ name: "prefix", description: "Yeni prefix", type: 3 }],
+    names: ["prefix"],
+    description: 'Prefixi değiştirmek/sıfırlamak içindir.',
+    usage: 'prefix [prefix]'
 };

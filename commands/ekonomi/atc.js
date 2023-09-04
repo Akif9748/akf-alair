@@ -1,14 +1,11 @@
-const Discord = require("discord.js"); // Discord.js'yi tanımladık.
-const { MessageEmbed } = Discord;
+const { MessageEmbed } =  require("discord.js"); 
 const { UserModel } = require("../../util/models/");
 const { parsenum } = require("../../util");
+
 exports.run = async (client, message) => {
-
-
-    const get = id => client.users.cache.get(id)?.tag || "~~" + id + "~~";
+    const get = id => client.users.cache.get(id)?.username || "~~" + id + "~~";
 
     const veri = await UserModel.find().sort({ para: -1 }).select("para").limit(30);
-
 
     const gonder = veri.map((rank, index) =>
         `**${index + 1}.** ${get(rank._id)} • ATC: **${parsenum(rank.para)}**`
@@ -19,13 +16,12 @@ exports.run = async (client, message) => {
         .setTitle("» Alair Global")
         .setDescription(gonder.join("\n"))]
     return message.reply({ embeds })
-
-
 }
 
 
 exports.help = {
-    name: ["atc", 'para'],
+    native: true,
+    names: ["atc", 'para'],
     description: 'Alair Global ATC sıralaması!',
     usage: 'atc'
 };

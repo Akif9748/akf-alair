@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
     const { tur, dosyaAdi } = komut;
     const konum = `../${tur}/${dosyaAdi}`;
     await message.reply("Komut bulundu!\n"
-        + "**Komut adı:** `" + komut.help.name + "`\n"
+        + "**Komut adları:** `" + komut.help.names + "`\n"
         + "**Gizli mi?** `" + (komut.help.gizli ? "Evet" : "Hayır") + "`\n"
         + "**Konum:** `" + konum + "`"
     )
@@ -40,7 +40,8 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-    name: 'komut',
+    names: ["komut"],
     description: 'Komut sil & resetle',
-    usage: 'komut <komut-adi>', gizli: true
+    usage: 'komut <komut-adi>', 
+    gizli: true
 };

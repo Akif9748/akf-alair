@@ -3,15 +3,16 @@ exports.run = async (client, message, args, guild) => {
     if (!message.member.isAdmin())
         return message.reply('Üzgünüm, buna yetkin yok :grinning:')
 
-    guild.oto = !guild.oto;
+    guild.rank = !guild.rank;
+
     await guild.save();
-    return message.reply(`Oto mesaj ${guild.oto ? "**açıldı**" : "**kapatıldı**"}`)
+    message.reply(`Rank sistemi **${guild.rank ? "açıldı" : "kapatıldı"}**.`)
 
 };
 
 exports.help = {
     native: true,
-    names: ["otocevap", "oto"],
-    description: 'Otomatik cevapları açar/kapatır.',
-    usage: 'oto'
+    names: ["rank"],
+    description: 'Rank sistemini açar/kapatır.',
+    usage: 'rank'
 };

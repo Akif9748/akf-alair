@@ -1,7 +1,7 @@
 exports.run = async (client, message, args, guild) => {
 
     if (!message.member.isAdmin())
-        return message.reply('Üzgünüm, buna yetkin yok :grinning:')
+        return message.reply('Üzgünüm, buna yetkin yok :grinning:');
 
     guild.caps = !guild.caps;
     await guild.save();
@@ -10,7 +10,9 @@ exports.run = async (client, message, args, guild) => {
 };
 
 exports.help = {
-    name: ["caps", "capsengel"],
+    native: true,
+    subcommand: "korumalar",
+    names: ["caps", "capsengel"],
     description: 'Cümle tamamen büyük harften ibaretse siler.',
     usage: 'caps'
 };

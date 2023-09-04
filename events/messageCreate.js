@@ -1,10 +1,11 @@
 const { duyuru } = require("../util/config"),
     blokerler = require("./util/blokerler"),
     { Guild } = require("../util"),
-    asb = require("../util/asb"),
-    { Custom } = require("../util/models"),
+    asb = require("../util/lib/asb"),
+    { Custom, CommandUsage } = require("../util/models"),
     sonkomut = {}, sonoto = {};
 
+let regex;
 
 /**
  * Alair alt katman dosyası / messageCreate.js
@@ -25,7 +26,9 @@ module.exports = async message => {
     const guild = await Guild(guildId);
     let { prefix, kufur, caps, oto, blacklist } = guild;
 
-    if (message.content === `<@${client.user.id}>` || message.content === `<@!${client.user.id}>`)
+    regex ||= new RegExp(`^<@!?${client.user.id}>( |)$`);
+
+    if (message.content.match(regex))
         return await message.reply(`Buyrun, komutlarımı **${prefix}yardım** yazarak öğrenebilirsiniz.`);
 
     /* engelleyiciler */
@@ -42,33 +45,49 @@ module.exports = async message => {
         const args = message.content.slice(prefix.length).split(/ +/g).filter(Boolean),
             command = args.shift()?.toLowerCase(); //KOMUT ADI
 
-        if (client.commands.has(command)) { //EĞER KOMUT VARSA
-            if (blacklist?.includes(channelId) && !message.member.isAdmin()) return blokerler.kes(message, "Bu kanalda komutlar kullanıma kapalıdır!");
+        let komut = client.commands.get(command);
+        if (!komut) return;
+        if (blacklist?.includes(channelId) && !message.member.isAdmin()) return blokerler.kes(message, "Bu kanalda komutlar kullanıma kapalıdır!");
 
-            if (!message.guild.members.me.perm("EMBED_LINKS"))
-                return message.reply("Embed mesaj gönderme yetkim kapalı.");
+        if (!message.guild.members.me.perm("EMBED_LINKS"))
+            return message.reply("Embed mesaj gönderme yetkim kapalı.");
 
-            let komut = client.commands.get(command);
+        if (typeof komut === "string")
+            komut = client.commands.get(komut);
 
-            if (typeof komut === "string")
-                komut = client.commands.get(komut);
+        if (!komut.help.gizli)
+            message.channel.sendTyping().catch(_ => _);
 
-            if (!komut.help.gizli)
-                message.channel.sendTyping().catch(_ => _);
+        sonkomut[message.author.id] = Date.now();
 
-            sonkomut[message.author.id] = Date.now();
+        try {
+            message.hata = (ek = "") => message.reply(`Doğru kullanım:\n\`\`\`${prefix + komut.help.usage}\`\`\`\n${ek}`).catch(_ => _);
+            await komut.run(client, message, args, guild);
+        } catch (e) {
+            asb.komut(command, message, e);
+        } finally {
+            komut.kullanim++;
 
-            try {
-                message.hata = (ek = "") => message.reply(`Doğru kullanım:\n\`\`\`${prefix + komut.help.usage}\`\`\`\n${ek}`).catch(_ => _);
-                await komut.run(client, message, args, guild);
-            } catch (e) {
-                asb.komut(command, message, e);
-            } finally {
-                komut.kullanim++;
-                client.ayarlar.kullanim.komut++;
-            }
+            const cmd = await CommandUsage.exists({ _id: client.today, "komutlar._id": komut.help.names[0] });
+
+            if (cmd)
+                await CommandUsage.updateOne(
+                    { _id: client.today, "komutlar._id": komut.help.names[0] },
+                    { $inc: { "komutlar.$.kullanim": 1, komut: 1 } }
+                );
+            else
+                await CommandUsage.updateOne({ _id: client.today }, {
+                    $push: {
+                        komutlar: {
+                            _id: komut.help.names[0],
+                            kullanim: 1
+                        }
+                    },
+                    $inc: { komut: 1 }
+                });
 
         }
+
     }
 
     if (!message.content.startsWith(prefix)) {

@@ -1,7 +1,7 @@
 const { User, emoji, parsems } = require("../../util");
 const { random } = require("../../util");
 
-exports.run = async (client, message, args) => {
+exports.run = async (client, message) => {
 
     const user = await User(message.author.id, "times.gunluk para"),
         sure = 86400000,
@@ -21,7 +21,8 @@ exports.run = async (client, message, args) => {
 };
 
 exports.help = {
-    name: ["günlük", "bonus"],
+    native: true,
+    names: ["günlük", "bonus"],
     description: 'Günlük bonus.',
     usage: 'günlük'
 };

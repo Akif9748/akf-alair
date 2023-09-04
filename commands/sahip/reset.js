@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const asb = require("../../util/asb")
+const asb = require("../../util/lib/asb")
 /**
  * 
  * @param {import("discord.js").Client} client 
@@ -9,17 +9,20 @@ const asb = require("../../util/asb")
  */
 exports.run = async (client, message) => {
     if (!message.member.isOwner()) return message.reply(`Bu komutu sadece Bot Sahibi kullanabilir!`);
-    const embed = new Discord.MessageEmbed().setName("resetleniyor")
-        .setDescription("**Açılış tarihi:** " + new Date(client.readyTimestamp).toLocaleString("tr"))
-        .setTimestamp()
+    const embed = new Discord.MessageEmbed()
+        .setFooter({ text: "Açılış tarihi:" })
+        .setName("Resetleniyor")
+        .setTimestamp(client.readyTimestamp)
+        
     await message.reply({ embeds: [embed] }).catch(() => { });
 
-    await asb.sigterm(client, 137).catch(() => process.exit(137));
+    await asb.telemetri(client, 137).catch(() => process.exit(137));
 
 };
 
 exports.help = {
-    name: 'reset',
+    names: ["reset"],
     description: 'Botun sahibi botu resetler.',
-    usage: 'reset', gizli: true
+    usage: 'reset',
+    gizli: true
 };

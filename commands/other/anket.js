@@ -4,38 +4,61 @@ const { delay } = require("../../util")
 
 exports.run = async (client, message, args) => {
 
-  const sayı = parseInt(args[0]), anket = args.slice(1).join(" ")
+  let sayı, anket, kanal = message.channel;
+  if (message.options) {
+    sayı = message.options.getInteger("şıksayısı");
+    anket = message.options.getString("anket");
+    kanal = message.options.getChannel("kanal") || message.channel;
+  } else {
+    sayı = parseInt(args[0]);
+    anket = args.slice(1).join(" ");
+  }
 
   if (!sayı || !anket)
     return message.hata(`Şık sayısını veya anketi unuttun! Unutma, en az 1, en fazla 9 şık seçeneğin var.`);
 
+  if (sayı > 9 || sayı < 1) return message.hata("En fazla 9 şık seçeneğin var.");
+
   const embed = new Discord.MessageEmbed()
-    .setTitle(message.author.tag + ' başlattığı oylama:')
+    .setTitle(message.author.username + ' başlattığı oylama:')
     .setDescription("```" + anket + "```")
     .setName("Anket sistemi");
+  await message.reply(`Anket başarıyla başlatıldı!`);
 
-  if (sayı == 1) {
-    const msg = await message.channel.send({ embeds: [embed.setFooter({ text: ' ✅ Haydi oyla! ⛔ ' })] })
+  if (sayı === 1) {
+    const msg = await kanal.send({ embeds: [embed.setFooter({ text: ' ✅ Haydi oyla! ⛔ ' })] })
     await msg.react('✅')
     await msg.react('⛔')
     await delay(1000)
-    return await message.delete();
 
-  } else if (9 >= sayı && sayı >= 1) {
+  } else {
 
-    const msg = await message.channel.send({ embeds: [embed.setFooter({ text: '🔢Haydi oyla!🔢' })] });
+    const msg = await kanal.send({ embeds: [embed.setFooter({ text: '🔢Haydi oyla!🔢' })] });
     for (let i = 1; i <= sayı; i++)
       await msg.react(emojiler[i]);
 
     await delay(1000);
-    return await message.delete();
 
-  } else return message.reply('Şık sayısı sadece 1 ve 9 arasındaki rakamlar olabilir.');
-
+  }
 
 };
 exports.help = {
-  name: ['anket', "oyla"],
+  native: true,
+  options: [
+    {
+      name: "şıksayısı", description: "Anketin şık sayısı.", type: 4, required: true, choices: [
+        {
+          name: "Evet/Hayır anketi",
+          value: 1
+        },
+        { name: "2 şıklı anket", value: 2 }, { name: "3 şıklı anket", value: 3 }, { name: "4 şıklı anket", value: 4 }, { name: "5 şıklı anket", value: 5 }, { name: "6 şıklı anket", value: 6 }, { name: "7 şıklı anket", value: 7 }, { name: "8 şıklı anket", value: 8 }, { name: "9 şıklı anket", value: 9 }
+      ]
+    },
+    {
+      name: "anket", description: "Anketin içeriği.", type: 3, required: true
+    },
+    { name: "kanal", description: "Anketin gönderileceği kanal.", type: 7, required: false }],
+  names: ['anket', "oyla"],
   description: 'Anket oluşturur!',
   usage: 'anket <şık sayısı> [anket]'
 };
