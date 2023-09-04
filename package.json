@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node app.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "deploy": "node scripts/deploy.js"
   },
   "author": "Akif9748",
   "license": "ISC",
@@ -14,25 +15,23 @@
     "url": "https://github.com/Akif9748/akf-alair.git"
   },
   "engines": {
-    "node": ">=16.X"
+    "node": "18.x"
   },
   "dependencies": {
-    "@discordjs/builders": "^0.12.0",
-    "@discordjs/rest": "^1.7.1",
-    "@napi-rs/canvas": "^0.1.41",
-    "async-g-i-s": "^1.4.0",
-    "discord.js": "^14.11.0",
+    "@discordjs/rest": "^2.0.1",
+    "@napi-rs/canvas": "^0.1.44",
+    "async-g-i-s": "^1.5.0",
+    "bufferutil": "^4.0.6",
+    "discord.js": "^14.13.0",
+    "eslint": "^8.48.0",
     "express": "^4.18.2",
-    "express-rate-limit": "^6.7.0",
+    "express-rate-limit": "^6.10.0",
     "figlet": "^1.6.0",
     "invert-color": "^2.0.0",
-    "mongoose": "^7.2.2",
+    "mongoose": "^7.5.0",
     "request-ip": "^3.3.0",
-    "turkce": "^1.1.2",
-    "bufferutil": "^4.0.6",
-    "eslint": "^8.41.0",
+    "turkce": "^1.1.3",
     "utf-8-validate": "^6.0.3",
     "zlib-sync": "^0.1.8"
-  },
-  "devDependencies": {}
+  }
 }
